@@ -7,6 +7,7 @@ import ResetPassword from "./components/Auth/ResetPassword";
 import Layout from "./components/Dasboard/Layout";
 import CompleteDashboard from "./components/Dasboard/DashboardScreen";
 import { Toaster } from "sonner";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 const App = () => {
@@ -14,15 +15,19 @@ const App = () => {
     <Router>
       <Toaster />
       <Routes>
-        <Route path="/" element={<Login/>}/>
+        <Route path="/" element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/forgot' element={<ForgotPassword />} />
         <Route path='/otp' element={<EnterOTP />} />
         <Route path='/reset' element={<ResetPassword />} />
 
-        <Route path='/layout' element={<Layout />}>
-          <Route index element={<CompleteDashboard />} />
-          <Route path="dashboard" element={<CompleteDashboard />} />
+        <Route path ="/layout" element ={
+          <ProtectedRoute>
+            <Layout/>
+          </ProtectedRoute>
+          }>
+            <Route index element={<CompleteDashboard />} />
+            <Route path="dashboard" element={<CompleteDashboard />} />
 
         </Route>
 

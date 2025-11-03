@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import overView from '../../assets/overView.png';
 import { useNavigate } from 'react-router-dom';
+import DashboardOverview from './DashboardOverview';
 
 
 const SignUp = () => {
@@ -10,13 +11,7 @@ const SignUp = () => {
 
     return (
         <div className="h-screen bg-[#16151C] flex flex-row items-center justify-center p-8 gap-8">
-            <div className="bg-[#F8F6FE] rounded-3xl p-8 shadow-2xl max-w-2xl">
-                <img
-                    className='w-140 h-140'
-                    src={overView}
-                    alt="Dashboard Overview"
-                />
-            </div>
+            <DashboardOverview/>
 
             <div className='flex flex-col items-center justify-center max-w-md w-full'>
                 <div className='text-center mb-8'>

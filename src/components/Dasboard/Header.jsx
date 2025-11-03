@@ -1,8 +1,12 @@
-import { Search, Bell, ChevronDown } from 'lucide-react';
+import { Bell, ChevronDown } from 'lucide-react';
+import ProfileModal from '../Modals/ProfileModal';
+import { useState } from 'react';
 
 const userAvatar = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop";
 
 const Header = () => {
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
     return (
         <div className="h-16 flex items-center justify-between px-6">
             <div>
@@ -18,10 +22,13 @@ const Header = () => {
                     <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
 
-                <button className="flex items-center gap-3 hover:bg-gray-700/50 rounded-lg px-3 py-2 transition-colors">
-                    <img 
-                        src={userAvatar} 
-                        alt="Robert Allen" 
+                <button
+                    onClick={() => setIsProfileModalOpen(!isProfileModalOpen)}
+
+                    className="flex items-center gap-3 hover:bg-gray-700/50 rounded-lg px-3 py-2 transition-colors">
+                    <img
+                        src={userAvatar}
+                        alt="Robert Allen"
                         className="w-8 h-8 rounded-full object-cover"
                     />
                     <div className="text-left">
@@ -31,6 +38,11 @@ const Header = () => {
                     <ChevronDown size={16} className="text-gray-400" />
                 </button>
             </div>
+            <ProfileModal
+                isOpen={isProfileModalOpen}
+                onClose={() => setIsProfileModalOpen(false)}
+            />
+
         </div>
     );
 };

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { showToast, makeRequest } from '../../Utils/util';
+import DashboardOverview from './DashboardOverview';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -66,13 +67,14 @@ const Login = () => {
 
     return (
         <div className="h-screen bg-[#16151C] flex flex-row items-center justify-center p-2 gap-8">
-            <div className="bg-[#F8F6FE] rounded-3xl p-8 shadow-2xl max-w-2xl">
+            <DashboardOverview/>
+            {/* <div className="bg-[#F8F6FE] rounded-3xl p-8 shadow-2xl max-w-2xl">
                 <img
                     className='w-140 h-140'
                     src={overView}
                     alt="Dashboard Overview"
                 />
-            </div>
+            </div> */}
 
             <div className='flex flex-col items-center justify-center max-w-md w-full'>
                 <div className='flex flex-row items-center gap-3 mb-8'>

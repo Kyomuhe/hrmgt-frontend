@@ -1,30 +1,64 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-
-import overView from '../../assets/overView.png';
+import { useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png'
+import { makeRequest, showToast } from '../../Utils/util';
+import DashboardOverview from './DashboardOverview';
 
 const EnterOTP = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const inputRefs = useRef([]);
+    const userEmail = location.state?.email;
+
+    useEffect(
+        () => {
+            if (!userEmail) {
+                navigate('/forgot')
+            }
+        }, [userEmail, navigate]
+    )
+
+    const verifyOtp = async () => {
+        try {
+            //const inputOtp = otp
+            const inputOtp = otp.join(''); 
+
+            const email = userEmail
+            const userData = { email, inputOtp }
+            const response = await makeRequest("verifyOtp", "Auth", userData)
+
+            if (response?.returnCode !== 0) {
+                const errorMessage = response?.returnMessage || "otp verification failed"
+                console.error(errorMessage)
+                showToast(errorMessage, 'error')
+                return;
+                
+            }
+            showToast('otp verified', 'success');
+            navigate('/reset',{state: {email:userEmail}});
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || error.message || "error verifying otp";
+            console.error(errorMessage)
+            showToast(errorMessage, 'error')
+
+        }
+    }
 
     const handleChange = (index, value) => {
         if (value.length > 1) return;
-        
+
         const newOtp = [...otp];
         newOtp[index] = value;
         setOtp(newOtp);
 
-        // Move to next input if value is entered
         if (value && index < 5) {
             inputRefs.current[index + 1]?.focus();
         }
     };
 
     const handleKeyDown = (index, e) => {
-        // Move to previous input on backspace if current input is empty
         if (e.key === 'Backspace' && !otp[index] && index > 0) {
             inputRefs.current[index - 1]?.focus();
         }
@@ -32,14 +66,7 @@ const EnterOTP = () => {
 
     return (
         <div className="h-screen bg-[#16151C] flex flex-row items-center justify-center p-8 gap-8">
-            <div className="bg-[#F8F6FE] rounded-3xl p-8 shadow-2xl max-w-2xl">
-                <img
-                    className='w-140 h-140'
-                    src={overView}
-                    alt="Dashboard Overview"
-                />
-            </div>
-
+            <DashboardOverview/>
             <div className='flex flex-col items-center justify-center max-w-md w-full'>
                 <div className='flex flex-row items-center gap-3 mb-8'>
                     <img
@@ -60,7 +87,7 @@ const EnterOTP = () => {
                         Enter OTP
                     </h2>
                     <p className='text-gray-400 text-sm mb-8'>
-                        We have share a code of your registered email address<br />
+                        We have shared a code to your registered email address<br />
                         robert.boller@example.com
                     </p>
 
@@ -80,8 +107,8 @@ const EnterOTP = () => {
                     </div>
 
                     <button
-                    onClick={()=>{navigate('/reset')}}
-                     className='w-full bg-[#7152F3] text-white font-semibold py-3 rounded-lg'>
+                        onClick={() => { verifyOtp() }}
+                        className='w-full bg-[#7152F3] text-white font-semibold py-3 rounded-lg'>
                         Verify
                     </button>
                 </div>

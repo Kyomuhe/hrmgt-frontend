@@ -2,22 +2,54 @@ import { useState } from 'react';
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import overView from '../../assets/overView.png';
 import logo from '../../assets/logo.png'
+import { makeRequest, showToast } from '../../Utils/util';
+import { useLocation, useNavigate } from 'react-router-dom';
+import DashboardOverview from './DashboardOverview';
 
 const ResetPassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const location = useLocation();
+    const userEmail = location.state?.email;
+
+    const navigate = useNavigate();
+
+
+    const reset = async () => {
+        try {
+            const email = userEmail
+            if (newPassword !== confirmPassword) {
+                showToast('passwords dont match', 'error');
+                return;
+            }
+
+            const password = confirmPassword
+
+            const resetData = { email, password }
+            const response = await makeRequest("resetPassword", "Auth", resetData)
+
+            if (response?.returnCode !== 0) {
+                const errorMessage = response?.returnMessage || "reseting password failed"
+                console.error(errorMessage)
+                showToast(errorMessage, 'error')
+                return;
+            }
+
+            showToast("reset sucessfully", "success")
+            navigate('/')
+        } catch (error) {
+            const errorMessage = error.message || response?.data?.error || "oops an issue occured"
+            console.error(errorMessage)
+            showToast(errorMessage);
+        }
+
+    }
 
     return (
         <div className="h-screen bg-[#16151C] flex flex-row items-center justify-center p-8 gap-8">
-            <div className="bg-[#F8F6FE] rounded-3xl p-8 shadow-2xl max-w-2xl">
-                <img
-                    className='w-140 h-140'
-                    src={overView}
-                    alt="Dashboard Overview"
-                />
-            </div>
+            <DashboardOverview/>
 
             <div className='flex flex-col items-center justify-center max-w-md w-full'>
                 <div className='flex flex-row items-center gap-3 mb-8'>
@@ -84,7 +116,9 @@ const ResetPassword = () => {
                             </div>
                         </div>
 
-                        <button className='w-full bg-[#7152F3] hover:bg-purple-700 text-white font-semibold py-3 rounded-lg mt-2'>
+                        <button
+                            onClick={() => { reset() }}
+                            className='w-full bg-[#7152F3] hover:bg-purple-700 text-white font-semibold py-3 rounded-lg mt-2'>
                             Reset Password
                         </button>
                     </div>
