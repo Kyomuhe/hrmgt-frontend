@@ -9,7 +9,7 @@ const Sidebar = () => {
 
     const menuItems = [
         { icon: LayoutDashboard, label: 'Dashboard', path: '/layout/dashboard' },
-        { icon: Users, label: 'All Employees', path: '/employees' },
+        { icon: Users, label: 'All Employees', path: '/layout/employees' },
         { icon: Building2, label: 'All Departments', path: '/departments' },
         { icon: Calendar, label: 'Attendance', path: '/attendance' },
         { icon: DollarSign, label: 'Payroll', path: '/payroll' },

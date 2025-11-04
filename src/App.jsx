@@ -8,6 +8,8 @@ import Layout from "./components/Dasboard/Layout";
 import CompleteDashboard from "./components/Dasboard/DashboardScreen";
 import { Toaster } from "sonner";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Employees from "./components/Dasboard/Employees";
+import EmployeeForm from "./components/Dasboard/EmployeeForm";
 
 
 const App = () => {
@@ -28,6 +30,8 @@ const App = () => {
           }>
             <Route index element={<CompleteDashboard />} />
             <Route path="dashboard" element={<CompleteDashboard />} />
+            <Route path ="employees" element= {<Employees/>}/>
+            <Route path = "register" element = {<EmployeeForm/>}/>
 
         </Route>
 

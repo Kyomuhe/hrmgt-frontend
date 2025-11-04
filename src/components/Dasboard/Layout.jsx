@@ -2,7 +2,7 @@ import Sidebar from "./SideMenu";
 import Header from "./Header";
 import { Outlet } from 'react-router-dom';
 
-const Layout = ({  }) => {
+const Layout = () => {
     return (
         <div className="flex h-screen bg-[#16151C] overflow-hidden">
             <Sidebar />
