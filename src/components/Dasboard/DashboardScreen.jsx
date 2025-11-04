@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TrendingUp, TrendingDown, ChevronLeft, ChevronRight, CalendarDays, Users, File, ClipboardClock } from 'lucide-react';
+import { TrendingUp, TrendingDown, ChevronLeft, ChevronRight, CalendarDays } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
 const chartData = [
@@ -24,17 +24,18 @@ const scheduleData = {
     ]
 };
 
-const StatsCard = ({ title, value, change, isPositive, icon: Icon }) => {
+const StatsCard = ({ title, value, change, isPositive, icon }) => {
     return (
         <div className="rounded-xl p-5 border border-[#A2A1A833]">
             <div className="flex items-center gap-2 text-gray-400 text-xs mb-3">
-                <Icon size={14} />
+                {icon}
                 <span>{title}</span>
             </div>
             <div className="flex items-end justify-between">
                 <p className="text-white text-3xl font-bold">{value}</p>
-                <div className={`flex items-center gap-1 text-xs px-2 py-1 rounded ${isPositive ? 'text-green-500 bg-green-500/10' : 'text-red-500 bg-red-500/10'
-                    }`}>
+                <div className={`flex items-center gap-1 text-xs px-2 py-1 rounded ${
+                    isPositive ? 'text-green-500 bg-green-500/10' : 'text-red-500 bg-red-500/10'
+                }`}>
                     {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                     <span>{change}</span>
                 </div>
@@ -45,22 +46,22 @@ const StatsCard = ({ title, value, change, isPositive, icon: Icon }) => {
 };
 
 const Calendar = () => {
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentDate, setCurrentDate] = useState(new Date(2025, 6, 1));
     const [selectedDate, setSelectedDate] = useState(6);
-
+    
     const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'];
-
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    
     const getDaysInMonth = (date) => {
         const year = date.getFullYear();
         const month = date.getMonth();
         const firstDay = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-
+        
         const days = [];
         let week = new Array(firstDay).fill(null);
-
+        
         for (let day = 1; day <= daysInMonth; day++) {
             week.push(day);
             if (week.length === 7) {
@@ -68,19 +69,19 @@ const Calendar = () => {
                 week = [];
             }
         }
-
+        
         if (week.length > 0) {
             while (week.length < 7) week.push(null);
             days.push(week);
         }
-
+        
         return days;
     };
-
+    
     const changeMonth = (direction) => {
         setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + direction, 1));
     };
-
+    
     const formatDate = (day) => {
         const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
         const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
@@ -97,7 +98,7 @@ const Calendar = () => {
             </div>
 
             <div className="flex items-center justify-between mb-4">
-                <button
+                <button 
                     onClick={() => changeMonth(-1)}
                     className="text-gray-400 hover:text-white p-2 bg-purple-600/20 rounded"
                 >
@@ -106,7 +107,7 @@ const Calendar = () => {
                 <span className="text-white text-sm font-medium">
                     {monthNames[currentDate.getMonth()]}, {currentDate.getFullYear()}
                 </span>
-                <button
+                <button 
                     onClick={() => changeMonth(1)}
                     className="text-gray-400 hover:text-white p-2 bg-purple-600/20 rounded"
                 >
@@ -129,12 +130,13 @@ const Calendar = () => {
                             <div
                                 key={dateIndex}
                                 onClick={() => date && setSelectedDate(date)}
-                                className={`text-center py-2 text-xs rounded-lg ${date === null
-                                    ? ''
-                                    : date === selectedDate
+                                className={`text-center py-2 text-xs rounded-lg ${
+                                    date === null
+                                        ? ''
+                                        : date === selectedDate
                                         ? 'bg-purple-600 text-white font-semibold cursor-pointer'
                                         : 'text-gray-400 hover:bg-gray-700/50 cursor-pointer'
-                                    }`}
+                                }`}
                             >
                                 {date}
                             </div>
@@ -175,36 +177,36 @@ const CompleteDashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <StatsCard
-                            title="Total Employee"
-                            value="560"
-                            change="12%"
+                        <StatsCard 
+                            title="Total Employee" 
+                            value="560" 
+                            change="12%" 
                             isPositive={true}
-                            icon={Users}
+                            icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>}
                         />
-                        <StatsCard
-                            title="Total Applicant"
-                            value="1050"
-                            change="10%"
+                        <StatsCard 
+                            title="Total Applicant" 
+                            value="1050" 
+                            change="10%" 
                             isPositive={true}
-                            icon={File}
+                            icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
                         />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <StatsCard
-                            title="Today Attendance"
-                            value="470"
-                            change="1%"
+                        <StatsCard 
+                            title="Today Attendance" 
+                            value="470" 
+                            change="1%" 
                             isPositive={false}
-                            icon={ClipboardClock}
+                            icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>}
                         />
-                        <StatsCard
-                            title="Total Projects"
-                            value="250"
-                            change="2%"
+                        <StatsCard 
+                            title="Total Projects" 
+                            value="250" 
+                            change="2%" 
                             isPositive={true}
-                            icon={File}
+                            icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>}
                         />
                     </div>
 
@@ -218,17 +220,32 @@ const CompleteDashboard = () => {
                             </select>
                         </div>
 
+                        <div className="flex items-center gap-6 mb-4">
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded bg-[#8B5CF6]"></div>
+                                <span className="text-gray-400 text-xs">Present</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded bg-[#F59E0B]"></div>
+                                <span className="text-gray-400 text-xs">Leave</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded bg-[#EF4444]"></div>
+                                <span className="text-gray-400 text-xs">Absent</span>
+                            </div>
+                        </div>
+
                         <ResponsiveContainer width="100%" height={320}>
                             <BarChart data={chartData} barSize={16}>
-                                <XAxis
-                                    dataKey="day"
-                                    stroke="#6B7280"
+                                <XAxis 
+                                    dataKey="day" 
+                                    stroke="#6B7280" 
                                     tick={{ fontSize: 11, fill: '#9CA3AF' }}
                                     axisLine={false}
                                     tickLine={false}
                                 />
-                                <YAxis
-                                    stroke="#6B7280"
+                                <YAxis 
+                                    stroke="#6B7280" 
                                     tick={{ fontSize: 11, fill: '#9CA3AF' }}
                                     axisLine={false}
                                     tickLine={false}

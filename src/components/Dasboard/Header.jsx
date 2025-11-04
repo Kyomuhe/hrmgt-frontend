@@ -1,17 +1,23 @@
 import { Bell, ChevronDown } from 'lucide-react';
 import ProfileModal from '../Modals/ProfileModal';
 import { useState } from 'react';
+import userAvatar from '../../assets/default.png'
+import { useMemo } from 'react';
 
-const userAvatar = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop";
 
 const Header = () => {
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+    const user = useMemo(
+        ()=>{
+            return JSON.parse(localStorage.getItem('user'))
+        }
+    )
 
     return (
         <div className="h-16 flex items-center justify-between px-6">
             <div>
                 <h2 className="text-white font-semibold text-base flex items-center gap-2">
-                    Hello Robert 👋
+                    Hello {user.firstName} 👋
                 </h2>
                 <p className="text-gray-400 text-xs">Good Morning</p>
             </div>
@@ -32,7 +38,7 @@ const Header = () => {
                         className="w-8 h-8 rounded-full object-cover"
                     />
                     <div className="text-left">
-                        <p className="text-white text-sm font-medium">Robert Allen</p>
+                        <p className="text-white text-sm font-medium">{user.firstName} {user.lastName}</p>
                         <p className="text-gray-400 text-xs">HR Manager</p>
                     </div>
                     <ChevronDown size={16} className="text-gray-400" />

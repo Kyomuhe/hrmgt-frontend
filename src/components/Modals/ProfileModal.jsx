@@ -3,6 +3,7 @@ import { useNavigate} from 'react-router-dom';
 import { showToast } from '../../Utils/util';
 import { clearTokens } from '../../Utils/TokenManager';
 const ProfileModal = ({ isOpen, onClose }) => {
+  
   const navigate = useNavigate();
 
   const handleLogout = () => {
