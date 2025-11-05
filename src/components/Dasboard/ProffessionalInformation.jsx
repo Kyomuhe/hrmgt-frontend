@@ -1,24 +1,6 @@
-function ProfessionalInformation({  onCancel }) {
+function ProfessionalInformation({ onCancel }) {
   return (
     <form>
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div>
-          <input
-            type="text"
-            name="employeeId"
-            placeholder="Employee ID"
-            className="w-full px-4 py-3 text-gray-300 rounded-lg border border-[#A2A1A833]"
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            name="userName"
-            placeholder="User Name"
-            className="w-full px-4 py-3 text-gray-300 rounded-lg border border-[#A2A1A833]"
-          />
-        </div>
-      </div>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
@@ -33,17 +15,6 @@ function ProfessionalInformation({  onCancel }) {
           </select>
         </div>
         <div>
-          <input
-            type="email"
-            name="emailAddress"
-            placeholder="Email Address"
-            className="w-full px-4 py-3 text-gray-300 rounded-lg border border-[#A2A1A833]"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div>
           <select
             name="department"
             className="w-full px-4 py-3 text-gray-300 rounded-lg border border-[#A2A1A833]"
@@ -55,33 +26,29 @@ function ProfessionalInformation({  onCancel }) {
             <option value="marketing">Marketing</option>
           </select>
         </div>
-        <div>
-          <input
-            type="text"
-            name="designation"
-            placeholder="Enter Designation"
-            className="w-full px-4 py-3 text-gray-300 rounded-lg border border-[#A2A1A833]"
-          />
-        </div>
+
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
-          <select
-            name="workingDays"
+          <input
+            type="text"
+            name="designation"
+            placeholder="Desigination"
             className="w-full px-4 py-3 text-gray-300 rounded-lg border border-[#A2A1A833]"
-          >
-            <option value="">Select Working Days</option>
-            <option value="5days">Monday - Friday</option>
-            <option value="6days">Monday - Saturday</option>
-            <option value="flexible">Flexible</option>
-          </select>
+          />
         </div>
+
+
         <div className="relative">
           <input
-            type="date"
+            type="type"
             name="joiningDate"
             placeholder="Select Joining Date"
+            onFocus={(e) => (e.target.type = "date")}
+            onBlur={(e) => {
+              if (!e.target.value) e.target.type = "text";
+            }}
             className="w-full px-4 py-3 text-gray-300 rounded-lg border border-[#A2A1A833]"
           />
         </div>
