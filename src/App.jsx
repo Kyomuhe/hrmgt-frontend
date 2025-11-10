@@ -12,6 +12,7 @@ import { Toaster } from "sonner";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Employees from "./components/Dasboard/Employees";
 import EmployeeForm from "./components/Dasboard/EmployeeForm";
+import Departments from "./components/Dasboard/Departments";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path='/forgot' element={<ForgotPassword />} />
           <Route path='/otp' element={<EnterOTP />} />
           <Route path='/reset' element={<ResetPassword />} />
+          <Route path = "/departments" element= {<Departments />} />
 
           <Route path="/layout" element={
             <ProtectedRoute>
@@ -34,6 +36,7 @@ const App = () => {
             <Route path="dashboard" element={<CompleteDashboard />} />
             <Route path="employees" element={<Employees />} />
             <Route path="register" element={<EmployeeForm />} />
+            <Route path="departments" element={<Departments />} />
           </Route>
         </Routes>
       </Router>

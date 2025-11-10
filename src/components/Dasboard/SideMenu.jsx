@@ -10,14 +10,14 @@ const Sidebar = () => {
     const menuItems = [
         { icon: LayoutDashboard, label: 'Dashboard', path: '/layout/dashboard' },
         { icon: Users, label: 'All Employees', path: '/layout/employees' },
-        { icon: Building2, label: 'All Departments', path: '/departments' },
-        { icon: Calendar, label: 'Attendance', path: '/attendance' },
-        { icon: DollarSign, label: 'Payroll', path: '/payroll' },
-        { icon: Briefcase, label: 'Jobs', path: '/jobs' },
-        { icon: UserCheck, label: 'Candidates', path: '/candidates' },
-        { icon: Umbrella, label: 'Leaves', path: '/leaves' },
-        { icon: Gift, label: 'Holidays', path: '/holidays' },
-        { icon: Settings, label: 'Settings', path: '/settings' },
+        { icon: Building2, label: 'All Departments', path: '/layout/departments' },
+        { icon: Calendar, label: 'Attendance'},
+        { icon: DollarSign, label: 'Payroll' },
+        { icon: Briefcase, label: 'Jobs' },
+        { icon: UserCheck, label: 'Candidates'},
+        { icon: Umbrella, label: 'Leaves' },
+        { icon: Gift, label: 'Holidays'},
+        { icon: Settings, label: 'Settings'},
     ];
 
     return (

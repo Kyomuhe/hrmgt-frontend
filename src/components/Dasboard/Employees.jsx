@@ -111,11 +111,8 @@ import { makeRequest, showToast } from '../../Utils/util';
                     {employee.designation}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      employee.employmentType === 'Permanent' 
-                        ? 'bg-[#7152F31A] text-[#7152F3]' 
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
+                    <span className={'px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800'
+                    }>
                       {employee.employmentType}
                     </span>
                   </td>
