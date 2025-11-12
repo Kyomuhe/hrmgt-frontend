@@ -2,11 +2,13 @@ import { Search, ChevronRight } from 'lucide-react';
 import { makeRequest, showToast } from '../../Utils/util';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AddDepartment from './AddDepartment';
+import AddDepartment from '../Modals/AddDepartment';
 
 const Departments = () => {
   const [departments, setDepartments] = useState([]);
   const [isAddDepartmentOpen, setIsDepartmentOpen] = useState(false);
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState(null);
+
   const navigate = useNavigate();
   useEffect(
     () => {
@@ -60,7 +62,12 @@ const Departments = () => {
                   <h2 className="text-white font-semibold text-lg">{dept.department.name}</h2>
                   <p className="text-gray-500 text-sm">{dept.department.employeeCount} Members</p>
                 </div>
-                <button className="text-blue-500 text-sm font-medium hover:text-blue-400">
+                <button 
+                onClick={()=>{
+                  setSelectedDepartmentId(dept.department.id)
+                  navigate('/layout/deptEmployees',{state :{departmentId :dept.department.id}} )
+                }}
+                className="text-blue-500 text-sm font-medium hover:text-blue-400">
                   View All
                 </button>
               </div>

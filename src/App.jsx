@@ -10,11 +10,12 @@ import Layout from "./components/Dasboard/Layout";
 import CompleteDashboard from "./components/Dasboard/DashboardScreen";
 import { Toaster } from "sonner";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Employees from "./components/Dasboard/Employees";
-import EmployeeForm from "./components/Dasboard/EmployeeForm";
-import Departments from "./components/Dasboard/Departments";
-import Profile from './components/Dasboard/Profile';
-import EditEmployee from './components/Dasboard/EditEmployee';
+import Employees from "./components/Employees/Employees";
+import EmployeeForm from "./components/Employees/EmployeeForm";
+import Departments from "./components/Departments/Departments";
+import Profile from './components/Employees/Profile';
+import EditEmployee from './components/Employees/EditEmployee';
+import DepartmentEmployees from './components/Departments/DepartmentEmployees';
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="departments" element={<Departments />} />
             <Route path="profile" element = {<Profile/>} />
             <Route path="edit" element ={<EditEmployee/>}/>
+            <Route path = "deptEmployees" element = {<DepartmentEmployees/>}/>
           </Route>
         </Routes>
       </Router>
