@@ -2,19 +2,29 @@ import { useEffect, useState } from 'react';
 import { Search, Plus, Filter, Eye, Edit2, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { makeRequest, showToast } from '../../Utils/util';
+import Delete from '../Modals/Delete';
 
 
- const Employees = () => {
+const Employees = () => {
   const [employees, setEmployees] = useState([]);
-  useEffect(()=>{
-    displayEmployees();
-  },[]);
-  
-  const displayEmployees = async() =>{
-    try{
-      const response = await makeRequest ("displayAllEmployees", "EmployeesService", {});
+  const [isDelete, setDeleteModal] = useState(false)
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
 
-      if(response?.returnCode !==0){
+  // const handleClick = (employeeId) => {
+  //   setSelectedEmployeeId(employeeId);
+  //   navigate("/layout/profile", { state: { EmployeeId : selectedEmployeeId } });
+
+  // };
+
+  useEffect(() => {
+    displayEmployees();
+  }, []);
+
+  const displayEmployees = async () => {
+    try {
+      const response = await makeRequest("displayAllEmployees", "EmployeesService", {});
+
+      if (response?.returnCode !== 0) {
         showToast(response?.returnMessage, 'error')
         console.error(response?.returnMessage)
         return;
@@ -23,7 +33,7 @@ import { makeRequest, showToast } from '../../Utils/util';
       setEmployees(response?.returnObject || []);
 
 
-    }catch(error){
+    } catch (error) {
       console.error(error.message)
       showToast(error.message, 'error');
 
@@ -52,11 +62,11 @@ import { makeRequest, showToast } from '../../Utils/util';
               className="w-full pl-10 pr-4 py-2 border border-[#A2A1A833] placeholder-white rounded-lg"
             />
           </div>
-          
+
           <div className="flex items-center gap-3 ml-4">
-            <button 
-            onClick={()=>{navigate('/layout/register')}}
-            className="flex items-center gap-2 px-4 py-2 bg-[#7152F3] text-white rounded-lg hover:bg-purple-700 transition">
+            <button
+              onClick={() => { navigate('/layout/register') }}
+              className="flex items-center gap-2 px-4 py-2 bg-[#7152F3] text-white rounded-lg hover:bg-purple-700 transition">
               <Plus className="w-5 h-5" />
               Add New Employee
             </button>
@@ -105,7 +115,7 @@ import { makeRequest, showToast } from '../../Utils/util';
                     {employee.id}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-white/50">
-                    {employee.department}
+                    {employee.departmentName}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-white/50">
                     {employee.designation}
@@ -118,13 +128,28 @@ import { makeRequest, showToast } from '../../Utils/util';
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex items-center gap-3">
-                      <button className="text-gray-400 hover:text-gray-600 transition">
+                      <button
+                        onClick={() => {
+                          setSelectedEmployeeId(employee.id);
+                          navigate("/layout/profile", { state: { EmployeeId: employee.id } });
+                        }}
+                        className="text-gray-400 hover:text-gray-600 transition">
                         <Eye className="w-5 h-5" />
                       </button>
-                      <button className="text-gray-400 hover:text-gray-600 transition">
+                      <button 
+                      onClick={()=>{
+                        setSelectedEmployeeId(employee.id);
+                        navigate('/layout/edit', {state: {EmployeeId: employee.id}});
+                      }}
+                      className="text-gray-400 hover:text-gray-600 transition">
                         <Edit2 className="w-5 h-5" />
                       </button>
-                      <button className="text-gray-400 hover:text-red-600 transition">
+                      <button
+                        onClick={() => {
+                          setDeleteModal(true)
+                          setSelectedEmployeeId(employee.id)
+                        }}
+                        className="text-gray-400 hover:text-red-600 transition">
                         <Trash2 className="w-5 h-5" />
                       </button>
                     </div>
@@ -135,6 +160,12 @@ import { makeRequest, showToast } from '../../Utils/util';
           </table>
         </div>
       </div>
+      <Delete
+        isOpen={isDelete}
+        onClose={() => setDeleteModal(false)}
+        employeeId={selectedEmployeeId}
+        onDeleteSuccess={displayEmployees}
+      />
     </div>
   );
 }

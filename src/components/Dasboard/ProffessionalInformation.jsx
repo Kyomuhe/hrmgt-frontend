@@ -7,8 +7,35 @@ import {
   setEmploymentType, resetEmployee
 } from '../../store/Employee';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 const ProfessionalInformation = ({ onCancel }) => {
+  const [departments, setDepartments] = useState([]);
+  useEffect(()=>{
+    displayDepartments();
+  },[]);
+
+  const displayDepartments = async() =>{
+    try{
+    const response = await makeRequest ("diplayDepartment", "departmentService", {});
+
+    if(response?.returnCode !==0){
+      console.error(response?.returnMessage);
+      showToast(response?.returnMessage, 'error');
+      return;
+    }
+    const allDepartments = response?.returnObject || [];
+    setDepartments(allDepartments);
+    // console.log('response:', response);
+    // console.log('departments:', departments);
+
+    }catch(error){
+      console.error(error.message);
+      showToast(error.message, 'error');
+    }
+
+  };
+
   const dispatch = useDispatch();
   const employeeData = useSelector((state) => state.employee);
   const navigate = useNavigate();
@@ -55,9 +82,10 @@ const ProfessionalInformation = ({ onCancel }) => {
 
           designation: values.designation,
           officeLocation: values.officeLocation,
-          department: values.department,
+          departmentName: values.department,
           joiningDate: values.joiningDate,
-          employmentType: values.employmentType
+          employmentType: values.employmentType,
+          departmentId: departments.find(dept => dept.name === values.department)?.id || null
         };
         console.log("this is the combined employee info")
         console.log(combinedData)
@@ -125,10 +153,14 @@ const ProfessionalInformation = ({ onCancel }) => {
               }`}
           >
             <option value="">Select Department</option>
-            <option value="design">Design</option>
-            <option value="development">Development</option>
-            <option value="sales">Sales</option>
-            <option value="marketing">Marketing</option>
+                {/* <option value="design">Design</option>
+                <option value="development">Development</option>
+                <option value="sales">Sales</option>
+                <option value="marketing">Marketing</option>
+    */}
+            {departments.map((dept, idx) => (
+              <option className='bg-[#7152F3]' key={idx} value={dept.name}>{dept.name}</option>
+            ))}
           </select>
           {formik.touched.department && formik.errors.department && (
             <p className='mt-1 text-sm text-red-500'>{formik.errors.department}</p>

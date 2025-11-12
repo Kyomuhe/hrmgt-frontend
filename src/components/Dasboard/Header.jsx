@@ -3,10 +3,12 @@ import ProfileModal from '../Modals/ProfileModal';
 import { useState } from 'react';
 import userAvatar from '../../assets/default.png'
 import { useMemo } from 'react';
+import { useGreetings } from '../../Hooks/useGreetings';
 
 
 const Header = () => {
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+    const greetings = useGreetings();
     const user = useMemo(
         ()=>{
             return JSON.parse(localStorage.getItem('user'))
@@ -19,7 +21,7 @@ const Header = () => {
                 <h2 className="text-white font-semibold text-base flex items-center gap-2">
                     Hello {user.firstName} 👋
                 </h2>
-                <p className="text-gray-400 text-xs">Good Morning</p>
+                <p className="text-gray-400 text-xs">{greetings}</p>
             </div>
 
             <div className="flex items-center gap-4">

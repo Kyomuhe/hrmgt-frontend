@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { showToast } from '../../Utils/util';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setFirstName, setLastName, setPhoneNumber, setEmail, setAddress, setDateOfBirth
     ,setMaritalStatus, setGender, setNationality
  } from '../../store/Employee';
@@ -9,6 +9,7 @@ import { setFirstName, setLastName, setPhoneNumber, setEmail, setAddress, setDat
 
 const PersonalInformation = ({ onNext, onCancel }) => {
     const dispatch = useDispatch();
+    const data = useSelector((state) => state.employee);
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string()
@@ -77,10 +78,10 @@ const PersonalInformation = ({ onNext, onCancel }) => {
                         type="text"
                         id="firstName"
                         name="firstName"
-                        value={formik.values.firstName}
+                        value={!data.firstName? formik.values.firstName : data.firstName}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        placeholder="First Name"
+                        placeholder='First Name'
                         className={`w-full px-4 py-3 text-gray-300 rounded-lg border border-[#A2A1A833] ${formik.touched.firstName && formik.errors.firstName
                             ? 'border-red-500 ring-red-400'
                             : 'border-gray-400'

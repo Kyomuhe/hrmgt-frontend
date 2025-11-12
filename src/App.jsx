@@ -13,6 +13,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Employees from "./components/Dasboard/Employees";
 import EmployeeForm from "./components/Dasboard/EmployeeForm";
 import Departments from "./components/Dasboard/Departments";
+import Profile from './components/Dasboard/Profile';
+import EditEmployee from './components/Dasboard/EditEmployee';
 
 const App = () => {
   return (
@@ -37,6 +39,8 @@ const App = () => {
             <Route path="employees" element={<Employees />} />
             <Route path="register" element={<EmployeeForm />} />
             <Route path="departments" element={<Departments />} />
+            <Route path="profile" element = {<Profile/>} />
+            <Route path="edit" element ={<EditEmployee/>}/>
           </Route>
         </Routes>
       </Router>
