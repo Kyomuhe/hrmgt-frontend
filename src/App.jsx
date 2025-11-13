@@ -16,6 +16,7 @@ import Departments from "./components/Departments/Departments";
 import Profile from './components/Employees/Profile';
 import EditEmployee from './components/Employees/EditEmployee';
 import DepartmentEmployees from './components/Departments/DepartmentEmployees';
+import AllJobs from './components/Jobs/AllJobs';
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
             <Route path="profile" element = {<Profile/>} />
             <Route path="edit" element ={<EditEmployee/>}/>
             <Route path = "deptEmployees" element = {<DepartmentEmployees/>}/>
+            <Route path="jobs" element ={<AllJobs/>}/>
           </Route>
         </Routes>
       </Router>

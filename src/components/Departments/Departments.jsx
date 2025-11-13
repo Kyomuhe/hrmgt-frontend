@@ -50,7 +50,7 @@ const Departments = () => {
           <div className='ml-auto'>
             <button
               onClick={() => { setIsDepartmentOpen(true) }}
-              className='bg-blue-500 rounded-lg text-white p-3'>Create Department</button>
+              className='bg-[#7152F3] rounded-lg text-white p-3'>Create Department</button>
           </div>
         </div>
 

@@ -13,7 +13,7 @@ const Sidebar = () => {
         { icon: Building2, label: 'All Departments', path: '/layout/departments' },
         // { icon: Calendar, label: 'Attendance'},
         { icon: DollarSign, label: 'Payroll' },
-        { icon: Briefcase, label: 'Jobs' },
+        { icon: Briefcase, label: 'Jobs', path: '/layout/jobs' },
         { icon: UserCheck, label: 'Candidates'},
         { icon: Umbrella, label: 'Leaves' },
         { icon: Gift, label: 'Holidays'},
