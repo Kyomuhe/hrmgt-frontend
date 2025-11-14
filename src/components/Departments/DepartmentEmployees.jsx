@@ -7,16 +7,12 @@ import Delete from '../Modals/Delete';
 
 const DepartmentEmployees = () => {
     const [employees, setEmployees] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isDelete, setDeleteModal] = useState(false)
     const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
     const location = useLocation();
     const { departmentId } = location.state || {};
-
-    // const handleClick = (employeeId) => {
-    //   setSelectedEmployeeId(employeeId);
-    //   navigate("/layout/profile", { state: { EmployeeId : selectedEmployeeId } });
-
-    // };
+    const navigate = useNavigate();
 
     useEffect(() => {
         displayEmployees();
@@ -24,6 +20,7 @@ const DepartmentEmployees = () => {
 
     const displayEmployees = async () => {
         try {
+            setIsLoading(true);
             const id = { departmentId: departmentId };
             const response = await makeRequest("displayEmployeeByDept", "departmentService", id);
             console.log('this is the department employees response');
@@ -32,6 +29,7 @@ const DepartmentEmployees = () => {
             if (response?.returnCode !== 0) {
                 showToast(response?.returnMessage, 'error')
                 console.error(response?.returnMessage)
+                setIsLoading(false);
                 return;
             }
 
@@ -39,22 +37,39 @@ const DepartmentEmployees = () => {
             const employeeList = departmentEmployees.employees || [];
 
             setEmployees(employeeList);
-
+            setIsLoading(false);
 
         } catch (error) {
             console.error(error.message)
             showToast(error.message, 'error');
-
+            setIsLoading(false);
         }
     }
-    const [searchTerm, setSearchTerm] = useState('');
-    const navigate = useNavigate();
 
-    // const filteredEmployees = employees.filter(emp =>
-    //   emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //   emp.employeeId.includes(searchTerm) ||
-    //   emp.department.toLowerCase().includes(searchTerm.toLowerCase())
-    // );
+    if (!isLoading && employees.length === 0) {
+        return (
+            <div className="min-h-screen border border-[#A2A1A833] rounded-lg p-6">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex flex-col items-center justify-center py-12">
+                        <div className="text-center">
+                            <h2 className="text-white text-xl font-semibold mb-2">
+                                No Employees in this Department
+                            </h2>
+                            <p className="text-white/50 mb-6">
+                                Get started by adding your first employee
+                            </p>
+                            <button
+                                onClick={() => { navigate('/layout/register') }}
+                                className="flex items-center gap-2 px-4 py-2 bg-[#7152F3] text-white rounded-lg hover:bg-purple-700 transition mx-auto">
+                                <Plus className="w-5 h-5" />
+                                Add New Employee
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen border border-[#A2A1A833] rounded-lg p-6">
@@ -65,8 +80,6 @@ const DepartmentEmployees = () => {
                         <input
                             type="text"
                             placeholder="Search"
-                            // value={searchTerm}
-                            // onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full pl-10 pr-4 py-2 border border-[#A2A1A833] placeholder-white rounded-lg"
                         />
                     </div>
@@ -85,7 +98,7 @@ const DepartmentEmployees = () => {
                     </div>
                 </div>
 
-                <div className=" rounded-lg shadow overflow-hidden">
+                <div className="rounded-lg shadow overflow-hidden">
                     <table className="w-full">
                         <thead className="border-b border-[#A2A1A81A]">
                             <tr>
@@ -114,7 +127,7 @@ const DepartmentEmployees = () => {
                                 <tr key={employee.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
-                                            <span className="text-sm  text-white/50">
+                                            <span className="text-sm text-white/50">
                                                 {employee.firstName} {employee.lastName}
                                             </span>
                                         </div>
@@ -129,8 +142,7 @@ const DepartmentEmployees = () => {
                                         {employee.designation}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={'px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800'
-                                        }>
+                                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                                             {employee.employmentType}
                                         </span>
                                     </td>

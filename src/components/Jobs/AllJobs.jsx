@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Plus, Briefcase, MapPin } from 'lucide-react';
+import { Search, Plus, Briefcase, MapPin, MoreVertical, Check } from 'lucide-react';
 import AddJob from './AddJob';
 import { makeRequest, showToast } from '../../Utils/util';
 
@@ -7,6 +7,8 @@ const AllJobs = () => {
   const [activeTab, setActiveTab] = useState('active');
   const [isAddJobOpen, setIsAddJobOpen] = useState(false);
   const [jobsData, setJobsData] = useState([]);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState({});
   
   useEffect(() => {
     displayJobs();
@@ -41,6 +43,54 @@ const AllJobs = () => {
     if (!responsibilities) return [];
     return responsibilities.split(',').map(tag => tag.trim());
   }
+
+  const handleStatusChange = (jobId, newStatus) => {
+    setSelectedStatus({ ...selectedStatus, [jobId]: newStatus });
+  }
+
+  const confirmStatusChange = async (jobId) => {
+    const newStatus = selectedStatus[jobId];
+    
+    if (!newStatus) {
+      showToast('Please select a status', 'error');
+      return;
+    }
+
+    const data = {
+      jobId: jobId,
+      status: newStatus
+    };
+
+    console.log("Sending data: ", data);
+
+    const response = await makeRequest("changeStatus", "jobService", data);
+
+    if (response?.returnCode !== 0) {
+      console.error(response?.returnMessage);
+      showToast(response?.returnMessage, 'error');
+      return;
+    }
+    
+    showToast('Job status updated successfully', 'success');
+    displayJobs();
+    setOpenDropdown(null);
+    setSelectedStatus({});
+  }
+
+  const toggleDropdown = (jobId) => {
+    if (openDropdown === jobId) {
+      setOpenDropdown(null);
+    } else {
+      setOpenDropdown(jobId);
+      setSelectedStatus({ ...selectedStatus, [jobId]: undefined });
+    }
+  }
+
+  const statusOptions = [
+    { value: 'active', label: 'Active', color: 'text-green-500' },
+    { value: 'inactive', label: 'Inactive', color: 'text-red-500' },
+    { value: 'completed', label: 'Completed', color: 'text-blue-500' }
+  ];
 
   return (
     <div className="min-h-screen text-white p-6">
@@ -98,13 +148,52 @@ const AllJobs = () => {
         {getFilteredJobs().map((job) => (
           <div
             key={job.id}
-            className="bg-[#25252A] border border-gray-800 rounded-lg p-5 hover:border-gray-700 transition-colors"
-          >            
+            className="bg-[#25252A] border border-gray-800 rounded-lg p-5 hover:border-gray-700 transition-colors relative"
+          >
+            <div className="absolute top-4 right-4">
+              <button
+                onClick={() => toggleDropdown(job.id)}
+                className="p-1 hover:bg-gray-700 rounded transition-colors"
+              >
+                <MoreVertical className="w-5 h-5 text-gray-400" />
+              </button>
+              
+              {openDropdown === job.id && (
+                <div className="absolute right-0 mt-2 w-48 bg-[#1A1A1D] border border-gray-700 rounded-lg shadow-lg z-10">
+                  <div className="p-2">
+                    <p className="text-xs text-gray-400 px-2 py-1 mb-1">Change Status</p>
+                    {statusOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => handleStatusChange(job.id, option.value)}
+                        className={`w-full text-left px-3 py-2 rounded flex items-center justify-between hover:bg-gray-700 transition-colors ${
+                          selectedStatus[job.id] === option.value ? 'bg-gray-700' : ''
+                        }`}
+                      >
+                        <span className={option.color}>{option.label}</span>
+                        {selectedStatus[job.id] === option.value && (
+                          <Check className="w-4 h-4 text-purple-500" />
+                        )}
+                      </button>
+                    ))}
+                    {selectedStatus[job.id] && (
+                      <button
+                        onClick={() => confirmStatusChange(job.id)}
+                        className="w-full mt-2 px-3 py-2 bg-[#7152F3] text-white rounded hover:bg-purple-700 transition-colors text-sm"
+                      >
+                        Confirm Change
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="flex items-start gap-3 mb-4">
               <div className="w-10 h-10 bg-[#1A1A1D] rounded border border-gray-700 flex items-center justify-center flex-shrink-0">
                 <Briefcase className="w-5 h-5 text-gray-400" />
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 pr-8">
                 <h3 className="text-white font-medium text-base mb-1">{job.role}</h3>
                 <p className="text-gray-400 text-sm">{job.department}</p>
               </div>
