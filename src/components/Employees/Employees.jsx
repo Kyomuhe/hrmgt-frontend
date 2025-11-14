@@ -39,7 +39,7 @@ const Employees = () => {
 
     }
   }
-  const [searchTerm, setSearchTerm] = useState('');
+  // const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   // const filteredEmployees = employees.filter(emp =>

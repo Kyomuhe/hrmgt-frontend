@@ -82,4 +82,4 @@ const Delete = ({ isOpen, onClose, employeeId, onDeleteSuccess }) => {
     )
 }
 
-export default Delete
+export default Delete;
