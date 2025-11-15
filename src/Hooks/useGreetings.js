@@ -6,15 +6,16 @@ export const useGreetings = () => {
         () => {
             const hour = new Date().getHours();
 
-            if (hour < 12 ){
+            if (hour < 12) {
                 setGreetings("Good morning");
             }
-            if( hour < 18 ){
+            if (hour < 18) {
                 setGreetings("Good Afternoon");
-            }else{
+            } else {
                 setGreetings("Good evening")
             }
-        },[]
+        }, []
     );
+
     return greetings
 };

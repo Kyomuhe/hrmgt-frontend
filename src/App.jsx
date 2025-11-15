@@ -17,6 +17,9 @@ import Profile from './components/Employees/Profile';
 import EditEmployee from './components/Employees/EditEmployee';
 import DepartmentEmployees from './components/Departments/DepartmentEmployees';
 import AllJobs from './components/Jobs/AllJobs';
+import Leaves from './components/Leaves/Leaves';
+import ApplyLeave from './components/Leaves/ApplyLeave';
+import MyLeaveStatus from './components/Leaves/MyLeaveStatus';
 
 const App = () => {
   return (
@@ -45,6 +48,9 @@ const App = () => {
             <Route path="edit" element ={<EditEmployee/>}/>
             <Route path = "deptEmployees" element = {<DepartmentEmployees/>}/>
             <Route path="jobs" element ={<AllJobs/>}/>
+            <Route path ="leaves" element ={<Leaves/>}/>
+            <Route path ="applyLeave" element = {<ApplyLeave/>}/>
+            <Route path ="myLeaveStatus" element = {<MyLeaveStatus/>}/>
           </Route>
         </Routes>
       </Router>

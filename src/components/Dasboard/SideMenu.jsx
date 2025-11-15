@@ -14,10 +14,9 @@ const Sidebar = () => {
         // { icon: Calendar, label: 'Attendance'},
         { icon: DollarSign, label: 'Payroll' },
         { icon: Briefcase, label: 'Jobs', path: '/layout/jobs' },
-        { icon: UserCheck, label: 'Candidates'},
-        { icon: Umbrella, label: 'Leaves' },
-        { icon: Gift, label: 'Holidays'},
-        // { icon: Settings, label: 'Settings'},
+        { icon: Umbrella, label: 'Leaves', path: '/layout/leaves' },
+        { icon: Gift, label: 'Leave Application', path: '/layout/applyLeave' },
+        { icon: UserCheck, label: 'Leave Status', path: '/layout/myLeaveStatus' },
     ];
 
     return (
