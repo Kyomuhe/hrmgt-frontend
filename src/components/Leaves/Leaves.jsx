@@ -314,14 +314,6 @@ const Leaves = () => {
     return diffDays;
   };
 
-  const getInitials = (name) => {
-    if (!name) return '?';
-    const parts = name.split(' ');
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase();
-    }
-    return name.substring(0, 2).toUpperCase();
-  };
 
   const pendingCount = leavesData.filter(l => l.status === 'pending').length;
   const approvedCount = leavesData.filter(l => l.status === 'approved').length;
@@ -363,7 +355,6 @@ const Leaves = () => {
 
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-2xl font-bold mb-2">Leave Applications</h1>
           <p className="text-gray-400">Manage employee leave requests</p>
         </div>
 
@@ -403,7 +394,7 @@ const Leaves = () => {
           </div>
         </div>
 
-        <div className="bg-[#1E1E23] border border-gray-800 rounded-xl p-4 mb-6">
+        <div className="p-4 mb-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -476,9 +467,6 @@ const Leaves = () => {
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg">
-                      {getInitials(leave.name)}
-                    </div>
                     <div>
                       <h3 className="text-white font-semibold">{leave.name}</h3>
                       <p className="text-sm text-gray-400">ID: {leave.employeeId} • {leave.department}</p>

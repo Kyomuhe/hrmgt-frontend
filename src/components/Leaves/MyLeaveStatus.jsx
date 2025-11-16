@@ -136,10 +136,9 @@ const MyLeaveStatus = () => {
     const rejectedCount = displayLeaves.filter(l => l.status === 'rejected').length;
 
     return (
-        <div className="min-h-screen text-white p-4 md:p-6">
-            <div className="max-w-7xl mx-auto">
+        <div className="min-h-screen text-white p-4 md:p-2">
+            <div className="max-w-5xl mx-auto">
                 <div className="mb-8">
-                    <h1 className="text-3xl md:text-4xl font-bold mb-2">My Leave Applications</h1>
                     <p className="text-gray-400">Track the status of your leave requests</p>
                 </div>
 
@@ -190,7 +189,7 @@ const MyLeaveStatus = () => {
                     </div>
                 </div>
 
-                <div className="bg-[#1E1E23] border border-gray-800 rounded-xl p-4 mb-6">
+                <div className="p-4 mb-6">
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                         <div className="relative flex-1">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
