@@ -23,6 +23,22 @@ import MyLeaveStatus from './components/Leaves/MyLeaveStatus';
 import AddUser from './components/UserManagement/AddUser';
 import AllUsers from './components/UserManagement/AllUsers';
 
+const RoleBasedRedirect = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  
+  if (!user || !user.roleCode) {
+    return <Navigate to="/" replace />;
+  }
+  
+  if (user.roleCode === 'HR') {
+    return <Navigate to="/layout/dashboard" replace />;
+  } else if (user.roleCode === 'user') {
+    return <Navigate to="/layout/myLeaveStatus" replace />;
+  }
+  
+  return <Navigate to="/layout/myLeaveStatus" replace />;
+};
+
 const App = () => {
   return (
     <Provider store={store}>
@@ -41,20 +57,22 @@ const App = () => {
               <Layout />
             </ProtectedRoute>
           }>
-            <Route index element={<CompleteDashboard />} />
+            <Route index element={<RoleBasedRedirect />} />
+            
             <Route path="dashboard" element={<CompleteDashboard />} />
             <Route path="employees" element={<Employees />} />
             <Route path="register" element={<EmployeeForm />} />
             <Route path="departments" element={<Departments />} />
+            <Route path="deptEmployees" element = {<DepartmentEmployees/>}/>
+            <Route path="jobs" element ={<AllJobs/>}/>
+            <Route path="leaves" element ={<Leaves/>}/>
+            <Route path="addUser" element = {<AddUser/>}/>
+            <Route path="users" element = {<AllUsers/>}/>
+            
+            <Route path="applyLeave" element = {<ApplyLeave/>}/>
+            <Route path="myLeaveStatus" element = {<MyLeaveStatus/>}/>
             <Route path="profile" element = {<Profile/>} />
             <Route path="edit" element ={<EditEmployee/>}/>
-            <Route path = "deptEmployees" element = {<DepartmentEmployees/>}/>
-            <Route path="jobs" element ={<AllJobs/>}/>
-            <Route path ="leaves" element ={<Leaves/>}/>
-            <Route path ="applyLeave" element = {<ApplyLeave/>}/>
-            <Route path ="myLeaveStatus" element = {<MyLeaveStatus/>}/>
-            <Route path = "addUser" element = {<AddUser/>}/>
-            <Route path ="users" element = {<AllUsers/>}/>
           </Route>
         </Routes>
       </Router>

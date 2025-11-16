@@ -6,18 +6,24 @@ import logo from '../../assets/logo.png'
 const Sidebar = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const user = JSON.parse(localStorage.getItem('user'));
 
-    const menuItems = [
-        { icon: LayoutDashboard, label: 'Dashboard', path: '/layout/dashboard' },
-        { icon: Users, label: 'All Employees', path: '/layout/employees' },
-        { icon: Building2, label: 'All Departments', path: '/layout/departments' },
-        { icon: Calendar, label: 'Add User', path:'/layout/addUser'},
-        { icon: DollarSign, label: 'All Users' , path:'/layout/users'},
-        { icon: Briefcase, label: 'Jobs', path: '/layout/jobs' },
-        { icon: Umbrella, label: 'Leaves', path: '/layout/leaves' },
-        { icon: Gift, label: 'Leave Application', path: '/layout/applyLeave' },
-        { icon: UserCheck, label: 'Leave Status', path: '/layout/myLeaveStatus' },
+    const allMenuItems = [
+        { icon: LayoutDashboard, label: 'Dashboard', path: '/layout/dashboard', roles: ['HR'] },
+        { icon: Users, label: 'All Employees', path: '/layout/employees', roles: ['HR'] },
+        { icon: Building2, label: 'All Departments', path: '/layout/departments', roles: ['HR'] },
+        { icon: Calendar, label: 'Add User', path:'/layout/addUser', roles: ['HR'] },
+        { icon: DollarSign, label: 'All Users' , path:'/layout/users', roles: ['HR'] },
+        { icon: Briefcase, label: 'Jobs', path: '/layout/jobs', roles: ['HR'] },
+        { icon: Umbrella, label: 'Leaves', path: '/layout/leaves', roles: ['HR'] },
+        { icon: Gift, label: 'Leave Application', path: '/layout/applyLeave', roles: ['USER'] },
+        { icon: UserCheck, label: 'Leave Status', path: '/layout/myLeaveStatus', roles: ['USER'] },
     ];
+
+    const menuItems = allMenuItems.filter(item => {
+        if (!user || !user.roleCode) return false;
+        return item.roles.includes(user.roleCode);
+    });
 
     return (
         <div className="w-64 h-screen bg-[#A2A1A80D] flex flex-col rounded-3xl p-6">

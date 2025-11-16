@@ -12,7 +12,7 @@ const Header = () => {
     const user = useMemo(
         ()=>{
             return JSON.parse(localStorage.getItem('user'))
-        }
+        },[]
     )
 
     return (
