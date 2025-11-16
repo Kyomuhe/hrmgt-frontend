@@ -20,6 +20,8 @@ import AllJobs from './components/Jobs/AllJobs';
 import Leaves from './components/Leaves/Leaves';
 import ApplyLeave from './components/Leaves/ApplyLeave';
 import MyLeaveStatus from './components/Leaves/MyLeaveStatus';
+import AddUser from './components/UserManagement/AddUser';
+import AllUsers from './components/UserManagement/AllUsers';
 
 const App = () => {
   return (
@@ -51,6 +53,8 @@ const App = () => {
             <Route path ="leaves" element ={<Leaves/>}/>
             <Route path ="applyLeave" element = {<ApplyLeave/>}/>
             <Route path ="myLeaveStatus" element = {<MyLeaveStatus/>}/>
+            <Route path = "addUser" element = {<AddUser/>}/>
+            <Route path ="users" element = {<AllUsers/>}/>
           </Route>
         </Routes>
       </Router>

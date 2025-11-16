@@ -154,7 +154,7 @@ const Login = () => {
                         <a
                             onClick={() => { navigate('forgot') }}
                             className='text-[#7152F3] text-sm cursor-pointer'>
-                            Forgot Password?
+                            Change / Forgot Password?
                         </a>
                     </div>
 
@@ -165,22 +165,7 @@ const Login = () => {
                         {formik.isSubmitting ? 'Logging in...' : 'Login'}
                     </button>
 
-                    <div className='flex items-center gap-1 my-6'>
-                        <div className='flex-1 h-px bg-gray-600'></div>
-                        <span className='text-gray-400 text-sm'>or</span>
-                        <div className='flex-1 h-px bg-gray-600'></div>
-                    </div>
 
-                    <div className='text-center'>
-                        <a
-                            onClick={() => { navigate('/signup') }}
-                            className='text-gray-300 text-sm cursor-pointer'>
-                            Don't have an account?{' '}
-                            <span className='text-[#7152F3] font-semibold'>
-                                Create Account
-                            </span>
-                        </a>
-                    </div>
                 </form>
             </div>
         </div>
