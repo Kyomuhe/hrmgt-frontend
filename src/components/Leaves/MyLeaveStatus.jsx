@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Search, Calendar, Clock, CheckCircle, XCircle, AlertCircle, FileText, Trash2, User, Phone } from 'lucide-react';
 import { makeRequest, showToast } from '../../Utils/util';
+import CancelModal from '../Modals/CancelLeave';
 
 const MyLeaveStatus = () => {
     const [activeTab, setActiveTab] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [leaveApplications, setLeaveApplications] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isCancelOpen, setIsCancelOpen] = useState(false);
+    const [selectedLeaveId, setSelectedLeaveId] = useState(null);
 
     useEffect(() => {
         fetchMyLeaves();
@@ -207,43 +210,39 @@ const MyLeaveStatus = () => {
                 <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
                     <button
                         onClick={() => setActiveTab('all')}
-                        className={`px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
-                            activeTab === 'all'
-                                ? 'bg-purple-600 text-white'
-                                : 'bg-[#25252A] text-gray-400 hover:text-white hover:bg-[#2D2D32]'
-                        }`}
+                        className={`px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${activeTab === 'all'
+                            ? 'bg-purple-600 text-white'
+                            : 'bg-[#25252A] text-gray-400 hover:text-white hover:bg-[#2D2D32]'
+                            }`}
                     >
                         All Applications
                     </button>
                     <button
                         onClick={() => setActiveTab('pending')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
-                            activeTab === 'pending'
-                                ? 'bg-yellow-600 text-white'
-                                : 'bg-[#25252A] text-gray-400 hover:text-white hover:bg-[#2D2D32]'
-                        }`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${activeTab === 'pending'
+                            ? 'bg-yellow-600 text-white'
+                            : 'bg-[#25252A] text-gray-400 hover:text-white hover:bg-[#2D2D32]'
+                            }`}
                     >
                         <AlertCircle className="w-4 h-4" />
                         Pending
                     </button>
                     <button
                         onClick={() => setActiveTab('approved')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
-                            activeTab === 'approved'
-                                ? 'bg-green-600 text-white'
-                                : 'bg-[#25252A] text-gray-400 hover:text-white hover:bg-[#2D2D32]'
-                        }`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${activeTab === 'approved'
+                            ? 'bg-green-600 text-white'
+                            : 'bg-[#25252A] text-gray-400 hover:text-white hover:bg-[#2D2D32]'
+                            }`}
                     >
                         <CheckCircle className="w-4 h-4" />
                         Approved
                     </button>
                     <button
                         onClick={() => setActiveTab('rejected')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${
-                            activeTab === 'rejected'
-                                ? 'bg-red-600 text-white'
-                                : 'bg-[#25252A] text-gray-400 hover:text-white hover:bg-[#2D2D32]'
-                        }`}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${activeTab === 'rejected'
+                            ? 'bg-red-600 text-white'
+                            : 'bg-[#25252A] text-gray-400 hover:text-white hover:bg-[#2D2D32]'
+                            }`}
                     >
                         <XCircle className="w-4 h-4" />
                         Rejected
@@ -283,6 +282,10 @@ const MyLeaveStatus = () => {
                                     </div>
                                     {leave.status === 'pending' && (
                                         <button
+                                            onClick={() => {
+                                                setSelectedLeaveId(leave.id);
+                                                setIsCancelOpen(true);
+                                            }}
                                             className="p-2 hover:bg-red-500/10 rounded-lg transition-colors group"
                                             title="Cancel Application"
                                         >
@@ -342,7 +345,7 @@ const MyLeaveStatus = () => {
                                 {leave.status === 'approved' && leave.approvedBy && (
                                     <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-lg mb-4">
                                         <p className="text-sm text-green-400">
-                                            ✓ Approved by {leave.approvedBy} {leave.approvedDate && `on ${formatDate(leave.approvedDate)}`}
+                                            Approved by {leave.approvedBy} {leave.approvedDate && `on ${formatDate(leave.approvedDate)}`}
                                         </p>
                                     </div>
                                 )}
@@ -377,12 +380,18 @@ const MyLeaveStatus = () => {
                             {searchQuery
                                 ? 'Try adjusting your search criteria'
                                 : activeTab === 'all'
-                                ? "You haven't submitted any leave applications yet"
-                                : `No ${activeTab} leave applications`}
+                                    ? "You haven't submitted any leave applications yet"
+                                    : `No ${activeTab} leave applications`}
                         </p>
                     </div>
                 )}
             </div>
+            <CancelModal
+                isOpen={isCancelOpen}
+                onClose={() => setIsCancelOpen(false)}
+                leaveId={selectedLeaveId}
+                onCancelSuccess ={fetchMyLeaves}
+            />
         </div>
     );
 };

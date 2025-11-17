@@ -41,7 +41,7 @@ const Header = () => {
                     />
                     <div className="text-left">
                         <p className="text-white text-sm font-medium">{user.firstName} {user.lastName}</p>
-                        <p className="text-gray-400 text-xs">HR Manager</p>
+                        <p className="text-gray-400 text-xs">{user.role}</p>
                     </div>
                     <ChevronDown size={16} className="text-gray-400" />
                 </button>

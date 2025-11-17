@@ -1,141 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Search, Filter, Calendar, User, Clock, CheckCircle, XCircle, AlertCircle, Phone, FileText, X } from 'lucide-react';
+import { Search, CheckCircle, XCircle, AlertCircle, Phone, FileText, X } from 'lucide-react';
 import { makeRequest, showToast } from '../../Utils/util';
+import ConfirmationModal from '../Modals/ConfirmationModal';
+import RejectionModal from '../Modals/RejectionModal';
 
-// Confirmation Modal Component
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, confirmText, confirmColor, isLoading }) => {
-  if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="bg-[#1E1E23] border border-gray-700 rounded-2xl shadow-2xl max-w-md w-full p-6 animate-[scale-in_0.2s_ease-out]">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-white">{title}</h3>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-800"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-        <p className="text-gray-300 mb-6 leading-relaxed">{message}</p>
-        <div className="flex gap-3">
-          <button
-            onClick={onClose}
-            disabled={isLoading}
-            className="flex-1 px-4 py-3 bg-[#25252A] hover:bg-[#2D2D32] text-white font-medium rounded-lg transition-all disabled:opacity-50"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={onConfirm}
-            disabled={isLoading}
-            className={`flex-1 px-4 py-3 ${confirmColor} text-white font-medium rounded-lg transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2`}
-          >
-            {isLoading ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Processing...
-              </>
-            ) : (
-              confirmText
-            )}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Rejection Modal Component
-const RejectionModal = ({ isOpen, onClose, onConfirm, employeeName, isLoading }) => {
-  const [reason, setReason] = useState('');
-  const [error, setError] = useState('');
-
-  const handleSubmit = () => {
-    if (!reason.trim()) {
-      setError('Please provide a reason for rejection');
-      return;
-    }
-    onConfirm(reason);
-  };
-
-  const handleClose = () => {
-    setReason('');
-    setError('');
-    onClose();
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="bg-[#1E1E23] border border-gray-700 rounded-2xl shadow-2xl max-w-md w-full p-6 animate-[scale-in_0.2s_ease-out]">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-white">Reject Leave Application</h3>
-          <button
-            onClick={handleClose}
-            disabled={isLoading}
-            className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-800"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-        <p className="text-gray-300 mb-4">
-          You are about to reject <span className="font-semibold text-white">{employeeName}</span>'s leave application.
-        </p>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Rejection Reason <span className="text-red-400">*</span>
-          </label>
-          <textarea
-            value={reason}
-            onChange={(e) => {
-              setReason(e.target.value);
-              setError('');
-            }}
-            placeholder="Please provide a detailed reason for rejection..."
-            className="w-full bg-[#25252A] text-white px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all resize-none"
-            rows="4"
-            disabled={isLoading}
-          />
-          {error && (
-            <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
-              <AlertCircle className="w-4 h-4" />
-              {error}
-            </p>
-          )}
-        </div>
-        <div className="flex gap-3">
-          <button
-            onClick={handleClose}
-            disabled={isLoading}
-            className="flex-1 px-4 py-3 bg-[#25252A] hover:bg-[#2D2D32] text-white font-medium rounded-lg transition-all disabled:opacity-50"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={isLoading}
-            className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all shadow-lg shadow-red-900/20 disabled:opacity-50 flex items-center justify-center gap-2"
-          >
-            {isLoading ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Rejecting...
-              </>
-            ) : (
-              <>
-                <XCircle className="w-4 h-4" />
-                Reject Application
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const Leaves = () => {
   const [activeTab, setActiveTab] = useState('pending');
@@ -143,7 +12,6 @@ const Leaves = () => {
   const [leavesData, setLeavesData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Modal states
   const [approveModal, setApproveModal] = useState({ isOpen: false, leaveId: null, employeeName: '' });
   const [rejectModal, setRejectModal] = useState({ isOpen: false, leaveId: null, employeeName: '' });
   const [isProcessing, setIsProcessing] = useState(false);
@@ -321,18 +189,6 @@ const Leaves = () => {
 
   return (
     <div className="min-h-screen bg-[#16161A] text-white p-4 md:p-6">
-      <style>{`
-        @keyframes scale-in {
-          from {
-            opacity: 0;
-            transform: scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-      `}</style>
 
       <ConfirmationModal
         isOpen={approveModal.isOpen}
@@ -402,7 +258,7 @@ const Leaves = () => {
               placeholder="Search by name, employee ID, department, or leave type..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#25252A] text-white pl-10 pr-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              className="w-full text-white pl-10 pr-4 py-3 rounded-lg border border-gray-700"
             />
           </div>
         </div>

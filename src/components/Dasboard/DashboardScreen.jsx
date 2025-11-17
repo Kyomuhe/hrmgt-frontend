@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { TrendingUp, TrendingDown, ChevronLeft, ChevronRight, CalendarDays, Users, FileText,CalendarCheck } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { TrendingUp, TrendingDown, ChevronLeft, ChevronRight, CalendarDays, Users, FileText, CalendarCheck } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { makeRequest, showToast } from '../../Utils/util';
 
 const chartData = [
     { day: 'Mon', present: 85, leave: 10, absent: 5 },
@@ -33,9 +34,8 @@ const StatsCard = ({ title, value, change, isPositive, icon }) => {
             </div>
             <div className="flex items-end justify-between">
                 <p className="text-white text-3xl font-bold">{value}</p>
-                <div className={`flex items-center gap-1 text-xs px-2 py-1 rounded ${
-                    isPositive ? 'text-green-500 bg-green-500/10' : 'text-red-500 bg-red-500/10'
-                }`}>
+                <div className={`flex items-center gap-1 text-xs px-2 py-1 rounded ${isPositive ? 'text-green-500 bg-green-500/10' : 'text-red-500 bg-red-500/10'
+                    }`}>
                     {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                     <span>{change}</span>
                 </div>
@@ -48,20 +48,20 @@ const StatsCard = ({ title, value, change, isPositive, icon }) => {
 const Calendar = () => {
     const [currentDate, setCurrentDate] = useState(new Date(2025, 6, 1));
     const [selectedDate, setSelectedDate] = useState(6);
-    
+
     const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-                        'July', 'August', 'September', 'October', 'November', 'December'];
-    
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+
     const getDaysInMonth = (date) => {
         const year = date.getFullYear();
         const month = date.getMonth();
         const firstDay = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-        
+
         const days = [];
         let week = new Array(firstDay).fill(null);
-        
+
         for (let day = 1; day <= daysInMonth; day++) {
             week.push(day);
             if (week.length === 7) {
@@ -69,19 +69,19 @@ const Calendar = () => {
                 week = [];
             }
         }
-        
+
         if (week.length > 0) {
             while (week.length < 7) week.push(null);
             days.push(week);
         }
-        
+
         return days;
     };
-    
+
     const changeMonth = (direction) => {
         setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + direction, 1));
     };
-    
+
     const formatDate = (day) => {
         const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
         const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][date.getDay()];
@@ -98,7 +98,7 @@ const Calendar = () => {
             </div>
 
             <div className="flex items-center justify-between mb-4">
-                <button 
+                <button
                     onClick={() => changeMonth(-1)}
                     className="text-gray-400 hover:text-white p-2 bg-purple-600/20 rounded"
                 >
@@ -107,7 +107,7 @@ const Calendar = () => {
                 <span className="text-white text-sm font-medium">
                     {monthNames[currentDate.getMonth()]}, {currentDate.getFullYear()}
                 </span>
-                <button 
+                <button
                     onClick={() => changeMonth(1)}
                     className="text-gray-400 hover:text-white p-2 bg-purple-600/20 rounded"
                 >
@@ -130,13 +130,12 @@ const Calendar = () => {
                             <div
                                 key={dateIndex}
                                 onClick={() => date && setSelectedDate(date)}
-                                className={`text-center py-2 text-xs rounded-lg ${
-                                    date === null
+                                className={`text-center py-2 text-xs rounded-lg ${date === null
                                         ? ''
                                         : date === selectedDate
-                                        ? 'bg-purple-600 text-white font-semibold cursor-pointer'
-                                        : 'text-gray-400 hover:bg-gray-700/50 cursor-pointer'
-                                }`}
+                                            ? 'bg-purple-600 text-white font-semibold cursor-pointer'
+                                            : 'text-gray-400 hover:bg-gray-700/50 cursor-pointer'
+                                    }`}
                             >
                                 {date}
                             </div>
@@ -172,47 +171,70 @@ const Calendar = () => {
 };
 
 const CompleteDashboard = () => {
+    useEffect(() => {
+        displayStatistics();
+    }, [])
+    const [stat, setStat] = useState("");
+
+    const displayStatistics = async () => {
+        try {
+
+            const response = await makeRequest("statistics", "EmployeesService", {})
+            if (response?.returnCode !== 0) {
+                console.error(response.returnMessage);
+                showToast(response.returnMessage, "error");
+                return;
+            }
+            const stats = response?.returnObject || []
+            setStat(stats);
+            console.log("this is the dashboard stat");
+            console.log(stat);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <div className="min-h-screen bg-[#16151C] p-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <StatsCard 
-                            title="Total Employee" 
-                            value="560" 
-                            change="12%" 
+                        <StatsCard
+                            title="Total Employee"
+                            value= {stat.employeeCount}
+                            change="12%"
                             isPositive={true}
-                            icon={<Users size={20}/>}
+                            icon={<Users size={20} />}
                         />
-                        <StatsCard 
-                            title="Total Applicant" 
-                            value="1050" 
-                            change="10%" 
+                        <StatsCard
+                            title="Leave Requests"
+                            value={stat.leavesCount}
+                            change="1%"
                             isPositive={true}
-                            icon={<FileText size={20}/>}
+                            icon={<FileText size={20} />}
                         />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <StatsCard 
-                            title="Today Attendance" 
-                            value="470" 
-                            change="1%" 
+                        <StatsCard
+                            title="Departments"
+                            value={stat.departmentCount}
+                            change="1%"
                             isPositive={false}
-                            icon={<CalendarCheck size={20}/>}
+                            icon={<CalendarCheck size={20} />}
                         />
-                        <StatsCard 
-                            title="Total Projects" 
-                            value="250" 
-                            change="2%" 
+                        <StatsCard
+                            title="Job count"
+                            value={stat.jobCount}
+                            change="2%"
                             isPositive={true}
-                            icon={<FileText size={20}/>}
+                            icon={<FileText size={20} />}
                         />
                     </div>
 
                     <div className="rounded-xl p-6 border border-gray-700/50">
                         <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-white text-base font-semibold">Attendance Overview</h2>
+                            <h2 className="text-white text-base font-semibold">Statistics Overview</h2>
                             <select className="bg-[#16151C] text-gray-400 text-xs px-3 py-1.5 rounded-lg border border-gray-700 focus:outline-none focus:border-purple-500">
                                 <option>Today</option>
                                 <option>This Week</option>
@@ -223,28 +245,28 @@ const CompleteDashboard = () => {
                         <div className="flex items-center gap-6 mb-4">
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded bg-[#8B5CF6]"></div>
-                                <span className="text-gray-400 text-xs">Present</span>
+                                <span className="text-gray-400 text-xs">Employees</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded bg-[#F59E0B]"></div>
-                                <span className="text-gray-400 text-xs">Leave</span>
+                                <span className="text-gray-400 text-xs">Leaves</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded bg-[#EF4444]"></div>
-                                <span className="text-gray-400 text-xs">Absent</span>
+                                <span className="text-gray-400 text-xs">Departments</span>
                             </div>
                         </div>
 
                         <ResponsiveContainer width="100%" height={320}>
                             <BarChart data={chartData} barSize={16}>
-                                <XAxis 
-                                    dataKey="day" 
+                                <XAxis
+                                    dataKey="day"
                                     // stroke="#6B7280" 
                                     tick={{ fontSize: 11, fill: '#9CA3AF' }}
                                     axisLine={false}
                                     tickLine={false}
                                 />
-                                <YAxis 
+                                <YAxis
                                     // stroke="#6B7280" 
                                     tick={{ fontSize: 11, fill: '#9CA3AF' }}
                                     axisLine={false}
