@@ -1,5 +1,4 @@
 import { ArrowLeft } from 'lucide-react';
-import overView from '../../assets/overView.png';
 import logo from '../../assets/logo.png'
 import { useNavigate } from 'react-router-dom';
 import { makeRequest, showToast } from '../../Utils/util';
@@ -72,7 +71,9 @@ const ForgotPassword = () => {
                     <h1 className='text-white font-bold text-2xl'>HRMS</h1>
                 </div>
 
-                <button className='flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6 self-start'>
+                <button
+                onClick ={()=>{navigate(-1)}} 
+                className='flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-6 self-start'>
                     <ArrowLeft size={18} />
                     <span className='text-sm'>Back</span>
                 </button>

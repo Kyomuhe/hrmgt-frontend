@@ -17,9 +17,9 @@ const Header = () => {
 
     return (
         <div className="h-16 flex items-center justify-between px-6">
-            <div>
-                <h2 className="text-white font-semibold text-base flex items-center gap-2">
-                    Hello {user.firstName} 👋
+            <div className='hidden md:block'> 
+                <h2 className="text-white font-semibold text-base flex items-center gap-2 ">
+                    Hello {user.firstName} 
                 </h2>
                 <p className="text-gray-400 text-xs">{greetings}</p>
             </div>

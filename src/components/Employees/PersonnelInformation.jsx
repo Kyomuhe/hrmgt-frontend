@@ -2,9 +2,10 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { showToast } from '../../Utils/util';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFirstName, setLastName, setPhoneNumber, setEmail, setAddress, setDateOfBirth
-    ,setMaritalStatus, setGender, setNationality
- } from '../../store/Employee';
+import {
+    setFirstName, setLastName, setPhoneNumber, setEmail, setAddress, setDateOfBirth
+    , setMaritalStatus, setGender, setNationality
+} from '../../store/Employee';
 
 
 const PersonalInformation = ({ onNext, onCancel }) => {
@@ -14,23 +15,34 @@ const PersonalInformation = ({ onNext, onCancel }) => {
     const validationSchema = Yup.object().shape({
         firstName: Yup.string()
             .trim()
-            .min(4, "atleast 4 characters")
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed")
+            .min(4, "At least 4 characters")
             .required("First name is required"),
+
         lastName: Yup.string()
             .trim()
-            .min(4, "atleast 4 characters")
-            .required("last name is required"),
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed")
+            .min(4, "At least 4 characters")
+            .required("Last name is required"),
+
         phoneNumber: Yup.string()
             .trim()
-            .min(10, "phone number must be 10 digits"),
+            .matches(/^[0-9]+$/, "Only numbers allowed")
+            .min(10, "Phone number must be 10 digits")
+            .max(10, "Phone number must be 10 digits"),
+
         email: Yup.string()
             .trim()
-            .email("invalid email"),
+            .email("Invalid email format"),
+
         address: Yup.string()
             .trim()
-            .min(3, "address must atleast be 3 characters")
+            .matches(/^[A-Za-z0-9\s.,-]+$/, "Invalid characters in address")
+            .min(3, "Address must be at least 3 characters"),
 
-    })
+        dateOfBirth: Yup.date()
+            .max(new Date(), 'Date of birth cannot be in the future'),
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -48,18 +60,18 @@ const PersonalInformation = ({ onNext, onCancel }) => {
         validationSchema: validationSchema,
         onSubmit: (values) => {
             try {
-                    dispatch(setFirstName(values.firstName));
-                    dispatch(setLastName(values.lastName));
-                    dispatch(setPhoneNumber(values.phoneNumber));
-                    dispatch(setEmail(values.email));
-                    dispatch(setAddress(values.address));
-                    dispatch(setDateOfBirth(values.dateOfBirth));
-                    dispatch(setMaritalStatus(values.maritalStatus));
-                    dispatch(setGender(values.gender));
-                    dispatch(setNationality(values.nationality));
+                dispatch(setFirstName(values.firstName));
+                dispatch(setLastName(values.lastName));
+                dispatch(setPhoneNumber(values.phoneNumber));
+                dispatch(setEmail(values.email));
+                dispatch(setAddress(values.address));
+                dispatch(setDateOfBirth(values.dateOfBirth));
+                dispatch(setMaritalStatus(values.maritalStatus));
+                dispatch(setGender(values.gender));
+                dispatch(setNationality(values.nationality));
 
-                    showToast("personal information saved", "success");
-                    onNext();
+                showToast("personal information saved", "success");
+                onNext();
 
             } catch (error) {
                 console.error(error.message)
@@ -78,7 +90,7 @@ const PersonalInformation = ({ onNext, onCancel }) => {
                         type="text"
                         id="firstName"
                         name="firstName"
-                        value={!data.firstName? formik.values.firstName : data.firstName}
+                        value={!data.firstName ? formik.values.firstName : data.firstName}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         placeholder='First Name'
@@ -162,8 +174,14 @@ const PersonalInformation = ({ onNext, onCancel }) => {
                     onBlur={(e) => {
                         if (!e.target.value) e.target.type = "text";
                     }}
-                    className="w-full px-4 py-3 text-gray-300 rounded-lg border border-[#A2A1A833]"
+                    className={`w-full px-4 py-3 text-gray-300 rounded-lg border border-[#A2A1A833] ${formik.touched.dateOfBirth && formik.errors.dateOfBirth
+                        ? 'border-red-500 ring-red-400'
+                        : 'border-gray-400'
+                        }`}
                 />
+                {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
+                    <p className='mt-1 text-sm text-red-500'>{formik.errors.dateOfBirth}</p>
+                )}
                 <div>
                     <select
                         name="maritalStatus"

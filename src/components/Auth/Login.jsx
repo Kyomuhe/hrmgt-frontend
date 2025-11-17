@@ -88,7 +88,7 @@ const Login = () => {
 
                 <div className='text-center mb-8'>
                     <h2 className='text-white text-2xl font-semibold mb-2'>
-                        Welcome 👋
+                        Welcome 
                     </h2>
                     <p className='text-gray-400 text-sm'>Please login here</p>
                 </div>
