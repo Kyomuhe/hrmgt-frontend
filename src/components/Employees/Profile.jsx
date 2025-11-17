@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { MessageCircle, CircleUser, PenLine, User, FileBadge, SquareUser, Mail, Phone, MapPin, Calendar, Building, Briefcase, DollarSign, Clock } from "lucide-react";
 import Avator from '../../assets/Avator.png';
 import { makeRequest, showToast } from "../../Utils/util";
-import { useLocation } from "react-router-dom";
+import { useLocation , useNavigate} from "react-router-dom";
 
 const Profile = () => {
     useEffect(() => {
@@ -12,6 +12,7 @@ const Profile = () => {
     const location = useLocation();
     const { EmployeeId } = location.state || {};
     const employeeId = EmployeeId;
+    const navigate = useNavigate();
 
 
     const [selectedTab, setSelectedTab] = useState("personal");
@@ -74,7 +75,11 @@ const Profile = () => {
                 </div>
 
                 <div className="ml-auto">
-                    <button className="flex gap-2 items-center bg-[#7152F3] text-white rounded-lg p-2 hover:bg-[#5f3dd1] transition-colors">
+                    <button
+                     onClick ={()=>{
+                        navigate('/layout/edit', {state: {EmployeeId: employeeId}});
+                    }}
+                     className="flex gap-2 items-center bg-[#7152F3] text-white rounded-lg p-2 hover:bg-[#5f3dd1] transition-colors">
                         <PenLine size={15} />
                         Edit Profile
                     </button>

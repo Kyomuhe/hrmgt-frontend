@@ -50,7 +50,6 @@ const App = () => {
           <Route path='/forgot' element={<ForgotPassword />} />
           <Route path='/otp' element={<EnterOTP />} />
           <Route path='/reset' element={<ResetPassword />} />
-          <Route path = "/departments" element= {<Departments />} />
 
           <Route path="/layout" element={
             <ProtectedRoute>
@@ -67,8 +66,7 @@ const App = () => {
             <Route path="jobs" element ={<AllJobs/>}/>
             <Route path="leaves" element ={<Leaves/>}/>
             <Route path="addUser" element = {<AddUser/>}/>
-            <Route path="users" element = {<AllUsers/>}/>
-            
+            <Route path="users" element = {<AllUsers/>}/>           
             <Route path="applyLeave" element = {<ApplyLeave/>}/>
             <Route path="myLeaveStatus" element = {<MyLeaveStatus/>}/>
             <Route path="profile" element = {<Profile/>} />

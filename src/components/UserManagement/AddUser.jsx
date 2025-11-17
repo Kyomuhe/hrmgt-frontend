@@ -12,33 +12,48 @@ const AddUser = () => {
     const validationSchema = Yup.object().shape({
         employeeId: Yup.string()
             .trim()
+            .matches(/^[0-9]+$/, "Employee ID must contain only numbers")
             .required("Employee ID is required"),
+
         firstName: Yup.string()
             .trim()
             .required("First name is required")
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed")
             .min(3, "First name must be at least 3 characters"),
+
         lastName: Yup.string()
             .trim()
             .required("Last name is required")
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed")
             .min(3, "Last name must be at least 3 characters"),
+
         email: Yup.string()
             .trim()
             .required("Email is required")
             .email("Invalid email address"),
+
         username: Yup.string()
             .trim()
             .required("Username is required")
-            .min(5, "Username must be at least 5 characters"),
+            .min(5, "Username must be at least 5 characters")
+            .matches(/^[A-Za-z0-9]+$/, "Username must contain only letters and numbers"),
+
         password: Yup.string()
             .trim()
             .required("Password is required")
             .min(4, "Password must be at least 4 characters"),
+
         department: Yup.string()
             .trim()
-            .required("Department is required"),
+            .required("Department is required")
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed"),
+
         role: Yup.string()
             .trim()
             .required("Role is required")
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed")
+            .min(4, "role must be at least 4 characters")
+
     });
 
     const formik = useFormik({
@@ -262,8 +277,8 @@ const AddUser = () => {
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     className={`w-full bg-[#16151C] border rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all ${formik.touched.username && formik.errors.username
-                                            ? 'border-red-500 focus:ring-red-400'
-                                            : 'border-[#7152F3] focus:ring-[#7152F3]'
+                                        ? 'border-red-500 focus:ring-red-400'
+                                        : 'border-[#7152F3] focus:ring-[#7152F3]'
                                         }`}
                                     placeholder='role'
                                 />

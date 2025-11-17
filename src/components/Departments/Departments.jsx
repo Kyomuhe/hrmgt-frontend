@@ -16,6 +16,7 @@ const Departments = () => {
     }, []
   )
 
+
   const displayDepartments = async () => {
     try {
       const response = await makeRequest("displayDepartmentsWithEmployees", "departmentService", {});

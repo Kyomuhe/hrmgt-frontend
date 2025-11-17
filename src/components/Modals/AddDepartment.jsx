@@ -8,6 +8,8 @@ const AddDepartment = ({ isOpen, onAddSuccess, onClose }) => {
         name: Yup.string()
             .required('department name is required')
             .min(5, 'department name must be atleast 5 characters')
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed")
+
     })
 
     const formik = useFormik({

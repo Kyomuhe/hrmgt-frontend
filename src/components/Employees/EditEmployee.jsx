@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
 const EditEmployee = () => {
-    const [employeeData, setEmployeeData] = useState(null);
+    // const [employeeData, setEmployeeData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
@@ -18,24 +18,47 @@ const EditEmployee = () => {
         firstName: Yup.string()
             .trim()
             .min(2, 'At least provide 2 characters')
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed")
+
             .required('First name required'),
         lastName: Yup.string()
             .trim()
             .min(2, 'At least provide 2 characters')
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed")
             .required('Last name required'),
         email: Yup.string()
             .email('Invalid email format')
             .required('Email is required'),
         phone: Yup.string()
+            .matches(/^[0-9]+$/, "Only numbers allowed")
+            .min(10, "Phone number must be 10 digits")
+            .max(10, "Phone number must be 10 digits")
             .required('Phone number is required'),
+
         dateOfBirth: Yup.date()
             .max(new Date(), 'Date of birth cannot be in the future'),
         address: Yup.string()
             .trim()
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed")
             .min(5, 'At least provide 5 characters'),
+
         nationality: Yup.string()
             .trim()
             .min(2, 'At least provide 2 characters')
+            .matches(/^[A-Za-z]+$/, "Only letters are allowed"),
+        designation: Yup.string()
+            .trim()
+            .min(2, 'At least provide 2 characters')
+            .matches(/^[A-Za-z ]+$/, "Only letters and spaces are allowed"),
+        officeLocation: Yup.string()
+            .trim()
+            .min(2, 'At least provide 2 characters')
+            .matches(/^[A-Za-z ]+$/, "Only letters and spaces are allowed"),
+
+
+
+
+
     });
 
     const formik = useFormik({
@@ -109,7 +132,7 @@ const EditEmployee = () => {
             }
 
             const employeeDetails = response?.returnObject;
-            setEmployeeData(employeeDetails);
+            // setEmployeeData(employeeDetails);
 
             formik.setValues({
                 firstName: employeeDetails.firstName || "",
@@ -141,9 +164,6 @@ const EditEmployee = () => {
         }
     }, [employeeId]);
 
-    const handleCancel = () => {
-        navigate('/layouts/employees');
-    };
 
     if (isLoading) {
         return (
@@ -345,6 +365,10 @@ const EditEmployee = () => {
                                         className="w-full bg-[#16151C] text-white px-4 py-3 border border-[#2A2930] rounded-lg focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all outline-none placeholder:text-gray-500"
                                         placeholder="Job title"
                                     />
+                                    {formik.touched.designation && formik.errors.designation && (
+                                        <p className="text-red-400 text-xs mt-1">{formik.errors.designation}</p>
+                                    )}
+
                                 </div>
 
                                 <div>
@@ -392,6 +416,10 @@ const EditEmployee = () => {
                                         className="w-full bg-[#16151C] text-white px-4 py-3 border border-[#2A2930] rounded-lg focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all outline-none placeholder:text-gray-500"
                                         placeholder="Office location"
                                     />
+                                    {formik.touched.officeLocation && formik.errors.officeLocation && (
+                                        <p className="text-red-400 text-xs mt-1">{formik.errors.officeLocation}</p>
+                                    )}
+
                                 </div>
                             </div>
                         </div>
@@ -399,7 +427,7 @@ const EditEmployee = () => {
                         <div className="flex justify-end gap-4 pt-2">
                             <button
                                 type="button"
-                                onClick={handleCancel}
+                                onClick={()=>{navigate("/layout/employees")}}
                                 className="px-6 py-3 border border-[#2A2930] rounded-lg text-gray-300 hover:bg-[#1E1D24] hover:border-[#3A3940] transition-all font-medium"
                             >
                                 Cancel

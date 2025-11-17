@@ -211,7 +211,7 @@ const MyLeaveStatus = () => {
                     <button
                         onClick={() => setActiveTab('all')}
                         className={`px-4 py-2 rounded-lg font-medium transition-all whitespace-nowrap ${activeTab === 'all'
-                            ? 'bg-purple-600 text-white'
+                            ? 'bg-[#7152F3] text-white'
                             : 'bg-[#25252A] text-gray-400 hover:text-white hover:bg-[#2D2D32]'
                             }`}
                     >

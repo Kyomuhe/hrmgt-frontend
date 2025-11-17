@@ -30,12 +30,13 @@ const ApplyLeave = () => {
             .required('Reason is required')
             .min(10, 'Reason must be at least 10 characters')
             .max(500, 'Reason must not exceed 500 characters'),
+
         contactNumber: Yup.string()
             .required('Contact number is required')
-            .matches(/^[0-9]{10}$/, 'Contact number must be 10 digits'),
+            .matches(/^[0-9]{10}$/, 'Contact number must be 10 digits and only numbers are allowed'),
         emergencyContact: Yup.string()
             .required('Emergency contact is required')
-            .matches(/^[0-9]{10}$/, 'Emergency contact must be 10 digits'),
+            .matches(/^[0-9]{10}$/, 'Emergency contact must be 10 digits and only numbers are allowed'),
     });
 
     const formik = useFormik({
@@ -137,7 +138,7 @@ const ApplyLeave = () => {
                                 </select>
                                 {formik.touched.leaveType && formik.errors.leaveType && (
                                     <p className="mt-2 text-sm text-red-400 flex items-center gap-1">
-                                         {formik.errors.leaveType}
+                                        {formik.errors.leaveType}
                                     </p>
                                 )}
                             </div>
@@ -178,7 +179,7 @@ const ApplyLeave = () => {
                                     />
                                     {formik.touched.endDate && formik.errors.endDate && (
                                         <p className="mt-2 text-sm text-red-400 flex items-center gap-1">
-                                             {formik.errors.endDate}
+                                            {formik.errors.endDate}
                                         </p>
                                     )}
                                 </div>
@@ -202,7 +203,7 @@ const ApplyLeave = () => {
                                     <div className="flex-1">
                                         {formik.touched.reason && formik.errors.reason && (
                                             <p className="text-sm text-red-400 flex items-center gap-1">
-                                                 {formik.errors.reason}
+                                                {formik.errors.reason}
                                             </p>
                                         )}
                                     </div>
@@ -229,7 +230,7 @@ const ApplyLeave = () => {
                                     />
                                     {formik.touched.contactNumber && formik.errors.contactNumber && (
                                         <p className="mt-2 text-sm text-red-400 flex items-center gap-1">
-                                        {formik.errors.contactNumber}
+                                            {formik.errors.contactNumber}
                                         </p>
                                     )}
                                 </div>
@@ -250,7 +251,7 @@ const ApplyLeave = () => {
                                     />
                                     {formik.touched.emergencyContact && formik.errors.emergencyContact && (
                                         <p className="mt-2 text-sm text-red-400 flex items-center gap-1">
-                                             {formik.errors.emergencyContact}
+                                            {formik.errors.emergencyContact}
                                         </p>
                                     )}
                                 </div>
@@ -270,7 +271,7 @@ const ApplyLeave = () => {
                                 <button
                                     type='submit'
                                     disabled={formik.isSubmitting}
-                                    className='flex-1 sm:flex-[1.5] px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-lg shadow-lg shadow-purple-900/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
+                                    className='flex-1 sm:flex-[1.5] px-6 py-3 bg-[#7152F3] text-white font-semibold rounded-lg  transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
                                 >
                                     {formik.isSubmitting ? (
                                         <>

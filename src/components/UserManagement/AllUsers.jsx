@@ -1,6 +1,7 @@
 import { showToast, makeRequest } from "../../Utils/util";
 import { useEffect, useState } from "react";
 import { UserPlus, Shield, Search, Filter, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AllUsers = () => {
     const [users, setUsers] = useState([]);
@@ -17,6 +18,7 @@ const AllUsers = () => {
     useEffect(() => {
         displayAllUsers();
     }, []);
+    const navigate = useNavigate();
 
     const displayAllUsers = async () => {
         try {
@@ -70,17 +72,17 @@ const AllUsers = () => {
             setIsChangingRole(true);
             const data = { userId: selectedUser.id, roleCode: newRole };
             const response = await makeRequest("changeRole", "Auth", data);
-            
+
             if (response?.returnCode !== 0) {
                 const errorMessage = response?.returnMessage || 'Failed to change role';
                 showToast(errorMessage, 'error');
                 console.error(errorMessage);
                 return;
             }
-            
+
             showToast("Changed role successfully", "success");
             closeRoleModal();
-            displayAllUsers(); // Refresh the user list
+            displayAllUsers();
         } catch (error) {
             console.error(error.message);
             showToast(error.message, "error");
@@ -149,6 +151,7 @@ const AllUsers = () => {
                         <p className="text-gray-400">Manage all registered users and their roles</p>
                     </div>
                     <button
+                        onClick={() => {navigate("/layout/addUser") }}
                         className="mt-4 md:mt-0 bg-[#7152F3] text-white px-6 py-3 rounded-lg hover:bg-[#5d3ed9] transition-all flex items-center gap-2 font-semibold"
                     >
                         <UserPlus size={20} />
@@ -265,7 +268,6 @@ const AllUsers = () => {
                                                     onClick={() => openRoleModal(user)}
                                                     className="bg-[#7152F3] text-white px-4 py-2 rounded-lg hover:bg-[#5d3ed9] transition-all flex items-center gap-2 text-sm font-semibold"
                                                 >
-                                                    <Shield size={16} />
                                                     Change Role
                                                 </button>
                                             </td>
@@ -282,7 +284,6 @@ const AllUsers = () => {
                 </div>
             </div>
 
-            {/* Role Change Modal */}
             {showRoleModal && selectedUser && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-[#1E1D24] rounded-xl border border-gray-800 max-w-md w-full p-6 shadow-2xl">
@@ -324,11 +325,10 @@ const AllUsers = () => {
                                         <button
                                             key={role}
                                             onClick={() => setNewRole(role)}
-                                            className={`w-full text-left px-4 py-3 rounded-lg border transition-all ${
-                                                newRole === role
+                                            className={`w-full text-left px-4 py-3 rounded-lg border transition-all ${newRole === role
                                                     ? 'bg-[#7152F3] border-[#7152F3] text-white'
                                                     : 'bg-[#16151C] border-gray-800 text-gray-300 hover:border-[#7152F3]'
-                                            }`}
+                                                }`}
                                         >
                                             <div className="flex items-center justify-between">
                                                 <span className="font-semibold">{role}</span>

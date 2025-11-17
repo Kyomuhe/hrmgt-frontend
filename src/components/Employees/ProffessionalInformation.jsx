@@ -11,25 +11,25 @@ import { useEffect, useState } from 'react';
 
 const ProfessionalInformation = ({ onCancel }) => {
   const [departments, setDepartments] = useState([]);
-  useEffect(()=>{
+  useEffect(() => {
     displayDepartments();
-  },[]);
+  }, []);
 
-  const displayDepartments = async() =>{
-    try{
-    const response = await makeRequest ("diplayDepartment", "departmentService", {});
+  const displayDepartments = async () => {
+    try {
+      const response = await makeRequest("diplayDepartment", "departmentService", {});
 
-    if(response?.returnCode !==0){
-      console.error(response?.returnMessage);
-      showToast(response?.returnMessage, 'error');
-      return;
-    }
-    const allDepartments = response?.returnObject || [];
-    setDepartments(allDepartments);
-    // console.log('response:', response);
-    // console.log('departments:', departments);
+      if (response?.returnCode !== 0) {
+        console.error(response?.returnMessage);
+        showToast(response?.returnMessage, 'error');
+        return;
+      }
+      const allDepartments = response?.returnObject || [];
+      setDepartments(allDepartments);
+      // console.log('response:', response);
+      // console.log('departments:', departments);
 
-    }catch(error){
+    } catch (error) {
       console.error(error.message);
       showToast(error.message, 'error');
     }
@@ -44,6 +44,7 @@ const ProfessionalInformation = ({ onCancel }) => {
     designation: Yup.string()
       .trim()
       .min(3, 'atleast provide 3 characters')
+      .matches(/^[A-Za-z]+$/, "Only letters are allowed")
       .required('designation required'),
     officeLocation: Yup.string()
       .trim()
@@ -153,7 +154,7 @@ const ProfessionalInformation = ({ onCancel }) => {
               }`}
           >
             <option value="">Select Department</option>
-                {/* <option value="design">Design</option>
+            {/* <option value="design">Design</option>
                 <option value="development">Development</option>
                 <option value="sales">Sales</option>
                 <option value="marketing">Marketing</option>
@@ -186,7 +187,7 @@ const ProfessionalInformation = ({ onCancel }) => {
               }`}
           />
           {formik.touched.designation && formik.errors.designation && (
-            <p>{formik.errors.designation}</p>
+            <p className='mt-1 text-sm text-red-500'>{formik.errors.designation}</p>
           )}
         </div>
 
