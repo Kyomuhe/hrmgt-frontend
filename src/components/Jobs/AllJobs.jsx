@@ -9,13 +9,16 @@ const AllJobs = () => {
   const [jobsData, setJobsData] = useState([]);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState({});
-  
+  const [searchTerm, setSearchTerm] = useState('')
+
+
   useEffect(() => {
     displayJobs();
   }, []);
 
   const displayJobs = async () => {
     const response = await makeRequest("displayJobs", "jobService", {});
+    console.log("these are the jobs")
     console.log(response);
 
     if (response?.returnCode !== 0) {
@@ -29,15 +32,34 @@ const AllJobs = () => {
     setJobsData(jobs);
   }
 
-  const getFilteredJobs = () => {
-    return jobsData.filter(job => {
-      const status = job.status?.toLowerCase();
-      if (activeTab === 'active') return status === 'active';
-      if (activeTab === 'inactive') return status === 'inactive';
-      if (activeTab === 'completed') return status === 'completed';
-      return false;
-    });
-  }
+  // const filteredJobs = jobsData.filter(job =>
+  //   job.department?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //   job.responsibilities?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //   job.role?.toLowerCase().includes(searchTerm.toLocaleLowerCase()) ||
+  //   job.workLocation?.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
+
+const getFilteredJobs = () => {
+  return jobsData.filter(job => {
+    const status = job.status?.toLowerCase();
+    
+    let matchesTab = false;
+    if (activeTab === 'active') matchesTab = status === 'active';
+    if (activeTab === 'inactive') matchesTab = status === 'inactive';
+    if (activeTab === 'completed') matchesTab = status === 'completed';
+    
+    if (!matchesTab) return false;
+    
+    if (searchTerm.trim() === '') return true;
+    
+    return (
+      job.department?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.responsibilities?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.workLocation?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+}
 
   const parseResponsibilities = (responsibilities) => {
     if (!responsibilities) return [];
@@ -50,7 +72,7 @@ const AllJobs = () => {
 
   const confirmStatusChange = async (jobId) => {
     const newStatus = selectedStatus[jobId];
-    
+
     if (!newStatus) {
       showToast('Please select a status', 'error');
       return;
@@ -70,7 +92,7 @@ const AllJobs = () => {
       showToast(response?.returnMessage, 'error');
       return;
     }
-    
+
     showToast('Job status updated successfully', 'success');
     displayJobs();
     setOpenDropdown(null);
@@ -99,6 +121,8 @@ const AllJobs = () => {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search..."
             className="w-full bg-[#25252A] text-white pl-10 pr-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors"
           />
@@ -115,8 +139,8 @@ const AllJobs = () => {
         <button
           onClick={() => setActiveTab('active')}
           className={`flex items-center gap-2 px-1 py-2 border-b-2 transition-colors ${activeTab === 'active'
-              ? 'border-green-500 text-white'
-              : 'border-transparent text-gray-400 hover:text-gray-300'
+            ? 'border-green-500 text-white'
+            : 'border-transparent text-gray-400 hover:text-gray-300'
             }`}
         >
           <span className={`w-2 h-2 rounded-full ${activeTab === 'active' ? 'bg-green-500' : 'bg-gray-500'}`} />
@@ -125,8 +149,8 @@ const AllJobs = () => {
         <button
           onClick={() => setActiveTab('inactive')}
           className={`flex items-center gap-2 px-1 py-2 border-b-2 transition-colors ${activeTab === 'inactive'
-              ? 'border-red-500 text-white'
-              : 'border-transparent text-gray-400 hover:text-gray-300'
+            ? 'border-red-500 text-white'
+            : 'border-transparent text-gray-400 hover:text-gray-300'
             }`}
         >
           <span className={`w-2 h-2 rounded-full ${activeTab === 'inactive' ? 'bg-red-500' : 'bg-gray-500'}`} />
@@ -135,8 +159,8 @@ const AllJobs = () => {
         <button
           onClick={() => setActiveTab('completed')}
           className={`flex items-center gap-2 px-1 py-2 border-b-2 transition-colors ${activeTab === 'completed'
-              ? 'border-blue-500 text-white'
-              : 'border-transparent text-gray-400 hover:text-gray-300'
+            ? 'border-blue-500 text-white'
+            : 'border-transparent text-gray-400 hover:text-gray-300'
             }`}
         >
           <span className={`w-2 h-2 rounded-full ${activeTab === 'completed' ? 'bg-blue-500' : 'bg-gray-500'}`} />
@@ -157,7 +181,7 @@ const AllJobs = () => {
               >
                 <MoreVertical className="w-5 h-5 text-gray-400" />
               </button>
-              
+
               {openDropdown === job.id && (
                 <div className="absolute right-0 mt-2 w-48 bg-[#1A1A1D] border border-gray-700 rounded-lg shadow-lg z-10">
                   <div className="p-2">
@@ -166,9 +190,8 @@ const AllJobs = () => {
                       <button
                         key={option.value}
                         onClick={() => handleStatusChange(job.id, option.value)}
-                        className={`w-full text-left px-3 py-2 rounded flex items-center justify-between hover:bg-gray-700 transition-colors ${
-                          selectedStatus[job.id] === option.value ? 'bg-gray-700' : ''
-                        }`}
+                        className={`w-full text-left px-3 py-2 rounded flex items-center justify-between hover:bg-gray-700 transition-colors ${selectedStatus[job.id] === option.value ? 'bg-gray-700' : ''
+                          }`}
                       >
                         <span className={option.color}>{option.label}</span>
                         {selectedStatus[job.id] === option.value && (

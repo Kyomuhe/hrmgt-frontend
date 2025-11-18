@@ -9,6 +9,8 @@ const Employees = () => {
   const [employees, setEmployees] = useState([]);
   const [isDelete, setDeleteModal] = useState(false)
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   // const handleClick = (employeeId) => {
   //   setSelectedEmployeeId(employeeId);
@@ -39,14 +41,14 @@ const Employees = () => {
 
     }
   }
-  // const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
 
-  // const filteredEmployees = employees.filter(emp =>
-  //   emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //   emp.employeeId.includes(searchTerm) ||
-  //   emp.department.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  const filteredEmployees = employees.filter(emp =>
+    emp.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    emp.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    emp.id?.toString().includes(searchTerm) ||
+    emp.departmentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    emp.designation?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen border border-[#A2A1A833] rounded-lg p-6">
@@ -57,9 +59,9 @@ const Employees = () => {
             <input
               type="text"
               placeholder="Search"
-              // value={searchTerm}
-              // onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-[#A2A1A833] placeholder-white rounded-lg"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-[#A2A1A833] placeholder-white rounded-lg text-white"
             />
           </div>
 
@@ -98,7 +100,7 @@ const Employees = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#A2A1A81A]">
-              {employees.map((employee) => (
+              {filteredEmployees.map((employee) => (
                 <tr key={employee.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">

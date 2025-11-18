@@ -2,8 +2,10 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Calendar, FileText, Clock, User, Briefcase, Send, Info } from 'lucide-react';
 import { makeRequest, showToast } from '../../Utils/util';
+import { useNavigate } from 'react-router-dom';
 
 const ApplyLeave = () => {
+    const navigate = useNavigate();
 
     const leaveTypes = [
         { value: '', label: 'Select leave type' },
@@ -73,6 +75,8 @@ const ApplyLeave = () => {
                 }
                 showToast('Leave application submitted successfully', 'success');
                 formik.resetForm();
+                navigate("/layout/myLeaveStatus");
+                
             } catch (error) {
                 console.error('Leave application error:', error);
                 showToast(error?.message, 'error');

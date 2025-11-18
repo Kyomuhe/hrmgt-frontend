@@ -8,6 +8,7 @@ const Departments = () => {
   const [departments, setDepartments] = useState([]);
   const [isAddDepartmentOpen, setIsDepartmentOpen] = useState(false);
   const [selectedDepartmentId, setSelectedDepartmentId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('')
 
   const navigate = useNavigate();
   useEffect(
@@ -35,6 +36,10 @@ const Departments = () => {
     }
   }
 
+const filteredDepartments = departments.filter(dpt =>
+  dpt.department?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
   return (
     <div className="min-h-screen border border-[#A2A1A833] rounded-lg p-6">
       <div className="max-w-7xl mx-auto">
@@ -44,6 +49,8 @@ const Departments = () => {
             <input
               type="text"
               placeholder="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className=" border border-gray-800 rounded-lg pl-12 pr-4 py-3 text-gray-300 placeholder-gray-600 focus:outline-none focus:border-gray-700"
             />
 
@@ -56,19 +63,19 @@ const Departments = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          {departments.map((dept, idx) => (
+          {filteredDepartments.map((dept, idx) => (
             <div key={idx} className=" border border-gray-800 rounded-xl p-3">
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-white font-semibold text-lg">{dept.department.name}</h2>
                   <p className="text-gray-500 text-sm">{dept.department.employeeCount} Members</p>
                 </div>
-                <button 
-                onClick={()=>{
-                  setSelectedDepartmentId(dept.department.id)
-                  navigate('/layout/deptEmployees',{state :{departmentId :dept.department.id}} )
-                }}
-                className="text-blue-500 text-sm font-medium hover:text-blue-400">
+                <button
+                  onClick={() => {
+                    setSelectedDepartmentId(dept.department.id)
+                    navigate('/layout/deptEmployees', { state: { departmentId: dept.department.id } })
+                  }}
+                  className="text-blue-500 text-sm font-medium hover:text-blue-400">
                   View All
                 </button>
               </div>
