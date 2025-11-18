@@ -10,6 +10,7 @@ const DepartmentEmployees = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isDelete, setDeleteModal] = useState(false)
     const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
     const location = useLocation();
     const { departmentId } = location.state || {};
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ const DepartmentEmployees = () => {
             console.log(response);
 
             if (response?.returnCode !== 0) {
-                showToast(response?.returnMessage, 'error')
+                // showToast(response?.returnMessage, 'error')
                 console.error(response?.returnMessage)
                 setIsLoading(false);
                 return;
@@ -41,10 +42,17 @@ const DepartmentEmployees = () => {
 
         } catch (error) {
             console.error(error.message)
-            showToast(error.message, 'error');
+            // showToast(error, 'error');
             setIsLoading(false);
         }
     }
+  const filteredEmployees = employees.filter(emp =>
+    emp.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    emp.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    emp.id?.toString().includes(searchTerm) ||
+    emp.departmentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    emp.designation?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
     if (!isLoading && employees.length === 0) {
         return (
@@ -80,7 +88,9 @@ const DepartmentEmployees = () => {
                         <input
                             type="text"
                             placeholder="Search"
-                            className="w-full pl-10 pr-4 py-2 border border-[#A2A1A833] placeholder-white rounded-lg"
+                            value = {searchTerm}
+                            onChange = {(e)=>setSearchTerm(e.target.value)}
+                            className="w-full text-white pl-10 pr-4 py-2 border border-[#A2A1A833] placeholder-white rounded-lg"
                         />
                     </div>
 
@@ -119,7 +129,7 @@ const DepartmentEmployees = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#A2A1A81A]">
-                            {employees.map((employee) => (
+                            {filteredEmployees.map((employee) => (
                                 <tr key={employee.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
