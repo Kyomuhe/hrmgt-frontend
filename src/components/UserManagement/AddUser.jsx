@@ -105,8 +105,8 @@ const AddUser = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center p-1">
-            <div className='flex flex-col items-center justify-center max-w-4xl w-full'>
-                <div className='text-center mb-8'>
+            <div className='flex flex-col items-center justify-center max-w-3xl w-full'>
+                <div className='text-center mb-2'>
                     <div className='flex items-center justify-center mb-4'>
                         <div className='bg-[#7152F3] p-4 rounded-full'>
                             <UserPlus size={32} className='text-white' />
@@ -120,7 +120,7 @@ const AddUser = () => {
                     </p>
                 </div>
 
-                <form onSubmit={formik.handleSubmit} className='w-full bg-[#1E1D24] rounded-2xl p-8 shadow-2xl'>
+                <form onSubmit={formik.handleSubmit} className='w-full rounded-2xl p-8 border border-[#A2A1A833]'>
                     <div className='w-full space-y-5'>
                         {formik.errors.general && (
                             <div className="p-3 bg-red-500/10 border border-red-500 rounded-lg">

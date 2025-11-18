@@ -91,14 +91,10 @@ const DepartmentEmployees = () => {
                             <Plus className="w-5 h-5" />
                             Add New Employee
                         </button>
-                        <button className="flex items-center gap-2 px-4 py-2 text-white border border-gray-300 rounded-lg">
-                            <Filter className="w-5 h-5 " />
-                            Filter
-                        </button>
                     </div>
                 </div>
 
-                <div className="rounded-lg shadow overflow-hidden">
+                <div className="rounded-lg shadow overflow-x-auto">
                     <table className="w-full">
                         <thead className="border-b border-[#A2A1A81A]">
                             <tr>

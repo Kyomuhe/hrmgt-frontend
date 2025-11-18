@@ -20,7 +20,6 @@ const Sidebar = () => {
         { icon: Umbrella, label: 'Leaves', path: '/layout/leaves', roles: ['HR'] },
         { icon: FileChartPie, label: 'Leave Status', path: '/layout/myLeaveStatus', roles: ['USER'] },
         { icon: FileUser, label: 'Leave Application', path: '/layout/applyLeave', roles: ['USER'] },
-
     ];
 
     const menuItems = allMenuItems.filter(item => {
@@ -51,8 +50,9 @@ const Sidebar = () => {
             )}
 
             <div
-                className={`fixed lg:static top-0 left-0 h-screen w-64 bg-[#A2A1A80D] flex flex-col rounded-3xl lg:rounded-3xl p-6 z-50 lg:z-auto transform lg:transform-none transition-transform duration-300 ease-in-out lg:transition-none ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-                    }`}
+                className={`fixed lg:static top-0 left-0 h-screen w-64 bg-gray-900 lg:bg-[#A2A1A80D] flex flex-col rounded-3xl lg:rounded-3xl p-6 z-50 lg:z-auto transform lg:transform-none transition-transform duration-300 ease-in-out lg:transition-none ${
+                    isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+                }`}
             >
                 <button
                     onClick={() => setIsOpen(false)}
@@ -76,10 +76,11 @@ const Sidebar = () => {
                             <button
                                 key={index}
                                 onClick={() => handleNavigate(item.path)}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive
+                                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                                    isActive
                                         ? 'bg-Primary/Primary-5% text-[#7152F3] border-l-3 border-[#7152F3]'
                                         : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
-                                    }`}
+                                }`}
                             >
                                 <Icon size={20} />
                                 <span className="text-sm font-medium">{item.label}</span>

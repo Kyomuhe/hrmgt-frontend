@@ -73,7 +73,7 @@ const Employees = () => {
           </div>
         </div>
 
-        <div className=" rounded-lg shadow overflow-hidden">
+        <div className=" rounded-lg shadow overflow-hidden overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-[#A2A1A81A]">
               <tr>
